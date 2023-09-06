@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Avatar,
   Box,
@@ -14,7 +15,7 @@ import Watch from "../../assets/svg/TVShowWhite.svg";
 import { SearchBar } from "../SearchBar";
 import Person1 from "../../assets/images/person-1.jpg";
 
-function Navbar() {
+function Navbar({ websiteName, paddingVertical }) {
   return (
     <>
       <Flex
@@ -24,11 +25,11 @@ function Navbar() {
           md: "10",
           lg: "20"
         }}
-        py={5}
+        py={paddingVertical}
         alignItems={"center"}
       >
         <Flex w={"50%"} alignItems={"center"} gap={5}>
-          <LogoFC />
+          <LogoFC websiteName={websiteName} />
           <LinkBox
             w={50}
             h={50}

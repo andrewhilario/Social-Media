@@ -11,7 +11,7 @@ import React from "react";
 function SearchBar() {
   return (
     <Flex>
-      <InputGroup>
+      <InputGroup w={"400px"}>
         <InputLeftElement pointerEvents={"none"}>
           <SearchIcon color={"#B2B2B2"} />
         </InputLeftElement>

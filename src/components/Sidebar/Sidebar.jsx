@@ -48,6 +48,7 @@ function Sidebar() {
             </AccordionButton>
             <AccordionPanel p="0">
               <SidebarItem
+                to="/reels"
                 icon={<Image src={Reels} w="32px" h="32px" />}
                 text={"Reels"}
               />

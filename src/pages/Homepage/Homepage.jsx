@@ -12,10 +12,10 @@ function Homepage() {
   return (
     <>
       <Helmet>
-        <title>Social Media App | Home</title>
+        <title>Home | Paysbook</title>
       </Helmet>
       {isLargerThan1280 ? (
-        <Layout>
+        <Layout webName="Paysbook" bgColor="#EDEDED" paddingY={5}>
           <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>
             <GridItem p={5}>
               <Sidebar />
