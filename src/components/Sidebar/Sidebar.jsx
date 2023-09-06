@@ -14,19 +14,16 @@ import { HiUsers, HiUserGroup } from "react-icons/hi";
 import { FaShoppingCart } from "react-icons/fa";
 import Watch from "../../assets/svg/TV Show.svg";
 import Reels from "../../assets/svg/Reels.svg";
+import Person1 from "../../assets/images/person-1.jpg";
 
 function Sidebar() {
   return (
     <>
       <Flex direction={"column"}>
         <SidebarItem
-          icon={
-            <Avatar
-              src="https://lh3.googleusercontent.com/a/AAcHTtdpp1SJUpO8wcx7ruPSU9DRNcy3IqVd_LyPEmpoQNULyb8=s288-c-no"
-              border={"2px solid #0C71F5"}
-            />
-          }
-          text={"John Doe"}
+          to="/profile"
+          icon={<Avatar src={Person1} border={"2px solid #0C71F5"} />}
+          text={"Mary Jane Doe"}
         />
         <SidebarItem
           icon={<HiUsers color="#0C71F5" fontSize={32} />}

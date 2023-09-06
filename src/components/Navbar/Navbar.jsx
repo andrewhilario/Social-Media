@@ -12,6 +12,7 @@ import Notification from "../../assets/svg/Notification.svg";
 import Message from "../../assets/svg/Chat Bubble.svg";
 import Watch from "../../assets/svg/TVShowWhite.svg";
 import { SearchBar } from "../SearchBar";
+import Person1 from "../../assets/images/person-1.jpg";
 
 function Navbar() {
   return (
@@ -81,11 +82,7 @@ function Navbar() {
           gap={10}
         >
           <SearchBar />
-          <Avatar
-            src={
-              "https://lh3.googleusercontent.com/a/AAcHTtdpp1SJUpO8wcx7ruPSU9DRNcy3IqVd_LyPEmpoQNULyb8=s288-c-no"
-            }
-          />
+          <Avatar src={Person1} />
         </Flex>
       </Flex>
     </>
