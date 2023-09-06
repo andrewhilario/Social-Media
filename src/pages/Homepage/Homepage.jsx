@@ -1,8 +1,10 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import { Helmet } from "react-helmet";
-import { Sidebar } from "../../components/Sidebar";
+import { Sidebar, SidebarRight } from "../../components/Sidebar";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
+import Layout from "../Layout";
+import NewsFeed from "../../components/NewsFeed/NewsFeed";
 
 function Homepage() {
   return (
@@ -10,14 +12,19 @@ function Homepage() {
       <Helmet>
         <title>Social Media App | Home</title>
       </Helmet>
-      <Box bg="#EDEDED" w={"100%"} h={"100vh"}>
-        <Navbar />
-        <Grid templateColumns={"repeat(3, 1fr)"} gap={6}>
-          <GridItem w="70%" p={5}>
+      <Layout>
+        <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>
+          <GridItem p={5}>
             <Sidebar />
           </GridItem>
+          <GridItem colSpan={2} w="100%">
+            <NewsFeed />
+          </GridItem>
+          <GridItem p={5} w="100%">
+            <SidebarRight />
+          </GridItem>
         </Grid>
-      </Box>
+      </Layout>
     </>
   );
 }

@@ -1,13 +1,18 @@
 import { Box, Container, Flex, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import Logo from "../../assets/svg/Logo.svg";
+import { Link } from "react-router-dom";
 
 function LogoFC() {
   return (
     <>
-      <Flex alignItems={"center"} mr={"24"}>
-        <Image src={Logo} alt="Logo" />
-      </Flex>
+      <Link to="/">
+        <Flex alignItems={"center"} mr={"24"}>
+          <Text fontSize={"4xl"} fontWeight={"medium"} color={"white"}>
+            Paysbook
+          </Text>
+        </Flex>
+      </Link>
     </>
   );
 }
