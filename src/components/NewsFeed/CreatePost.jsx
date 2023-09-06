@@ -85,24 +85,47 @@ function CreatePost(props) {
             mt={2}
             borderRadius={"10px 10px 0 0 "}
           />
-          <Flex gap={2} mt={3}>
-            <Button background={"transparent"} align={"center"}>
-              <RiLiveFill color="red" fontSize={16} />
-              <Text ml={2} fontSize={14}>
-                Live Video
-              </Text>
-            </Button>
-            <Button background={"transparent"} align={"center"}>
-              <AiFillCamera color="#15855A" fontSize={16} />
-              <Text ml={2} fontSize={14}>
-                Photo / Video
-              </Text>
-            </Button>
-            <Button background={"transparent"} align={"center"}>
-              <BsEmojiLaughing color="#E7D59B" fontSize={16} />
-              <Text ml={2} fontSize={14}>
-                Feeling / Activity
-              </Text>
+          <Flex
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            mt={2}
+            w="100%"
+          >
+            <Flex gap={2}>
+              <Button background={"transparent"} align={"center"}>
+                <RiLiveFill color="red" fontSize={16} />
+                <Text ml={2} fontSize={14}>
+                  Live Video
+                </Text>
+              </Button>
+              <Button background={"transparent"} align={"center"}>
+                <AiFillCamera color="#15855A" fontSize={16} />
+                <Text ml={2} fontSize={14}>
+                  Photo / Video
+                </Text>
+              </Button>
+              <Button background={"transparent"} align={"center"}>
+                <BsEmojiLaughing color="#E7D59B" fontSize={16} />
+                <Text ml={2} fontSize={14}>
+                  Feeling / Activity
+                </Text>
+              </Button>
+            </Flex>
+            <Button
+              background={"#0C71F5"}
+              color={"white"}
+              borderRadius={10}
+              px={10}
+              py={2}
+              fontSize={14}
+              fontWeight={"bold"}
+              _hover={{
+                bg: "#0951af",
+                borderRadius: 25,
+                transition: "all .4s ease-out"
+              }}
+            >
+              Post
             </Button>
           </Flex>
         </Box>
