@@ -21,9 +21,9 @@ function Navbar({ websiteName, paddingVertical }) {
       <Flex
         bg="#0C71F5"
         px={{
-          base: "5",
-          md: "10",
-          lg: "20"
+          base: "5px",
+          md: "10px",
+          lg: "20px"
         }}
         py={paddingVertical}
         alignItems={"center"}
@@ -82,7 +82,7 @@ function Navbar({ websiteName, paddingVertical }) {
           alignItems={"center"}
           gap={10}
         >
-          <SearchBar />
+          <SearchBar searchBarWidth={"400px"} />
           <Avatar src={Person1} />
         </Flex>
       </Flex>

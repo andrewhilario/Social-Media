@@ -1,11 +1,23 @@
 import React from "react";
 import Layout from "../Layout";
+import ProfileHeader from "./components/ProfileHeader";
+import Person1 from "../../assets/images/person-1.jpg";
+import { Helmet } from "react-helmet";
 
 function Profile() {
   return (
-    <Layout>
-      <h1>Profile</h1>
-    </Layout>
+    <>
+      <Helmet>
+        <title>Profile | Paysbook</title>
+      </Helmet>
+      <Layout paddingY={2}>
+        <ProfileHeader
+          profileImage={Person1}
+          name={"Mary Jane Doe"}
+          friends={203}
+        />
+      </Layout>
+    </>
   );
 }
 

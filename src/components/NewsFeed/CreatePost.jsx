@@ -24,7 +24,15 @@ function CreatePost(props) {
   const [isSelected, setIsSelected] = React.useState("");
   return (
     <>
-      <Flex w="90%" margin={"0 auto"} bg="white" borderRadius={10} p={3} my={3}>
+      <Flex
+        w="90%"
+        margin={"0 auto"}
+        h={props.height ? props.height : "230px"}
+        bg="white"
+        borderRadius={10}
+        p={3}
+        my={3}
+      >
         <Avatar src={Person1} />
         <Box ml={3} w="100%">
           <Text fontWeight="bold">{props.name}</Text>
