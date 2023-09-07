@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-function SearchBar() {
+function SearchBar(searchBarWidth) {
   return (
     <Flex>
-      <InputGroup w={"400px"}>
+      <InputGroup w={searchBarWidth}>
         <InputLeftElement pointerEvents={"none"}>
           <SearchIcon color={"#B2B2B2"} />
         </InputLeftElement>
