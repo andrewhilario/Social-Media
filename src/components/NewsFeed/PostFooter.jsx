@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Button, Flex, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import {
   BiLike,
@@ -11,6 +11,7 @@ import { FaShare } from "react-icons/fa";
 function PostFooter() {
   const [isLiked, setIsLiked] = React.useState(false);
   const [likes, setLikes] = React.useState(0);
+  const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
 
   const handleToggle = () => {
     setIsLiked(!isLiked);
@@ -23,7 +24,13 @@ function PostFooter() {
   };
   return (
     <>
-      <Flex mt={4} gap={4}>
+      <Flex
+        mt={4}
+        gap={{
+          base: 2,
+          md: 4
+        }}
+      >
         <Flex alignItems={"center"}>
           <Button
             bg={"none"}
@@ -37,8 +44,14 @@ function PostFooter() {
           >
             {isLiked ? <BiSolidLike /> : <BiLike />}
           </Button>
-          <Text ml={1} fontSize={14}>
-            {likes} Likes
+          <Text
+            ml={{
+              base: 0,
+              md: 1
+            }}
+            fontSize={14}
+          >
+            {likes} {isScreenSmall ? "" : "likes"}
           </Text>
         </Flex>
         <Flex alignItems={"center"}>
@@ -54,7 +67,7 @@ function PostFooter() {
             <BiCommentDetail />
           </Button>
           <Text ml={1} fontSize={14}>
-            comments
+            {isScreenSmall ? "" : "likes"}
           </Text>
         </Flex>
         <Flex alignItems={"center"}>
@@ -70,7 +83,7 @@ function PostFooter() {
             <FaShare />
           </Button>
           <Text ml={1} fontSize={14}>
-            Share
+            {isScreenSmall ? "" : "likes"}
           </Text>
         </Flex>
       </Flex>

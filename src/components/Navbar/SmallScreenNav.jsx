@@ -26,14 +26,19 @@ function SmallScreenNav({ websiteName }) {
         justify={"space-between"}
       >
         <LogoFC websiteName={websiteName} />
-        <Flex gap={2}>
+        <Flex
+          gap={{
+            base: 1,
+            md: 2
+          }}
+        >
           <Flex
             w={{
-              base: 10,
+              base: 9,
               md: 12
             }}
             h={{
-              base: 10,
+              base: 9,
               md: 12
             }}
             borderRadius={"100%"}
@@ -48,11 +53,11 @@ function SmallScreenNav({ websiteName }) {
           </Flex>
           <Flex
             w={{
-              base: 10,
+              base: 9,
               md: 12
             }}
             h={{
-              base: 10,
+              base: 9,
               md: 12
             }}
             borderRadius={"100%"}

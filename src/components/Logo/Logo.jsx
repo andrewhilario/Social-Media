@@ -8,7 +8,13 @@ function LogoFC(props) {
   return (
     <>
       <Link to="/">
-        <Flex alignItems={"center"} mr={"24"}>
+        <Flex
+          alignItems={"center"}
+          mr={{
+            base: 0,
+            md: "24"
+          }}
+        >
           <Text fontSize={"4xl"} fontWeight={"medium"} color={"white"}>
             {props.websiteName}
           </Text>
