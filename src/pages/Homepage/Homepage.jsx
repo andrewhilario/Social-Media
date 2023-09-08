@@ -13,6 +13,7 @@ function Homepage() {
     <>
       <Helmet>
         <title>Home | Paysbook</title>
+        <meta name="title" content="Paysbook" />
         <meta
           name="description"
           content="Discover the future of financial empowerment with Paysbook. Join our community of smart earners, investors, and dreamers. Earn, save, and invest seamlessly while building a brighter tomorrow. Get started today!"
