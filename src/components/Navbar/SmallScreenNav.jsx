@@ -28,8 +28,14 @@ function SmallScreenNav({ websiteName }) {
         <LogoFC websiteName={websiteName} />
         <Flex gap={2}>
           <Flex
-            w={12}
-            h={12}
+            w={{
+              base: 10,
+              md: 12
+            }}
+            h={{
+              base: 10,
+              md: 12
+            }}
             borderRadius={"100%"}
             _hover={{
               bg: "#0149a8",
@@ -41,8 +47,14 @@ function SmallScreenNav({ websiteName }) {
             <SearchIcon color={"white"} fontSize={24} />
           </Flex>
           <Flex
-            w={12}
-            h={12}
+            w={{
+              base: 10,
+              md: 12
+            }}
+            h={{
+              base: 10,
+              md: 12
+            }}
             borderRadius={"100%"}
             _hover={{
               bg: "#0149a8",
