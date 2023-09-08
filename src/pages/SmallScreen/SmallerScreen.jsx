@@ -31,7 +31,7 @@ function SmallerScreen() {
     <>
       <Layout webName="Paysbook" bgColor="white" paddingY={5}>
         <Tabs isFitted onChange={(index) => setIsSelected(index)}>
-          <TabList w={"100%"}>
+          <TabList>
             <Tab>
               {isSelected === 0 ? (
                 <AiFillHome color="#0C71f5" fontSize={24} />
