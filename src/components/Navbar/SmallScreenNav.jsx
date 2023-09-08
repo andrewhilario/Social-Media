@@ -48,11 +48,11 @@ function SmallScreenNav({ websiteName }) {
           </Flex>
           <Flex
             w={{
-              base: 10,
+              base: 11,
               md: 12
             }}
             h={{
-              base: 10,
+              base: 11,
               md: 12
             }}
             borderRadius={"100%"}
