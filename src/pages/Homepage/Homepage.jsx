@@ -18,6 +18,13 @@ function Homepage() {
           name="description"
           content="Discover the future of financial empowerment with Paysbook. Join our community of smart earners, investors, and dreamers. Earn, save, and invest seamlessly while building a brighter tomorrow. Get started today!"
         />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Paysbook" />
+        <meta
+          property="og:description"
+          content="Discover the future of financial empowerment with Paysbook. Join our community of smart earners, investors, and dreamers. Earn, save, and invest seamlessly while building a brighter tomorrow. Get started today!"
+        />
+        <meta property="og:site_name" content="Paysbook" />
       </Helmet>
       {isLargerThan1280 ? (
         <Layout webName="Paysbook" bgColor="#EDEDED" paddingY={5}>
