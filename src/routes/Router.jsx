@@ -3,6 +3,7 @@ import Layout from "../pages/Layout";
 import { Homepage } from "../pages/Homepage";
 import { Profile } from "../pages/Profile";
 import Reels from "../pages/Reels/Reels";
+import About from "../pages/About/About";
 
 export default function Router() {
   return (
