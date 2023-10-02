@@ -12,11 +12,25 @@ function LogoFC(props) {
           alignItems={"center"}
           mr={{
             base: 0,
-            md: "24"
+            md: "24px"
           }}
+          margin={props.margin ?? "0"}
+          flexDirection={"column"}
         >
-          <Text fontSize={"4xl"} fontWeight={"medium"} color={"white"}>
+          <Text
+            fontSize={props.mainTextFontSize ?? "4xl"}
+            fontWeight={props.mainTextFontWeight ?? "medium"}
+            color={props.color ?? "white"}
+          >
             {props.websiteName}
+          </Text>
+          <Text
+            textAlign={"center"}
+            color={props.subColor}
+            fontSize={props.subTextFontSize ?? "md"}
+            fontWeight={"medium"}
+          >
+            {props.subTitleWebsiteName ?? ""}
           </Text>
         </Flex>
       </Link>
