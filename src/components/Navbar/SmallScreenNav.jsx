@@ -4,14 +4,17 @@ import LogoFC from "../Logo/Logo";
 import {
   Box,
   Drawer,
+  DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  Text,
   useDisclosure
 } from "@chakra-ui/react";
 import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 function SmallScreenNav({ websiteName }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -84,6 +87,11 @@ function SmallScreenNav({ websiteName }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Hamburger Menu</DrawerHeader>
+          <DrawerBody>
+            <Link to="/reels">
+              <Text>Reels</Text>
+            </Link>
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
     </>
