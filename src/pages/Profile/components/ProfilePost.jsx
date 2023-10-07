@@ -5,7 +5,19 @@ import CreatePost from "../../../components/NewsFeed/CreatePost";
 
 function ProfilePost() {
   return (
-    <Flex gap={5}>
+    <Flex
+      w={{
+        base: "100%",
+        md: "100%",
+        lg: "90%"
+      }}
+      gap={5}
+      direction={{
+        base: "column",
+        md: "column",
+        lg: "row"
+      }}
+    >
       <Flex
         direction={"column"}
         backgroundColor={"white"}
@@ -21,9 +33,14 @@ function ProfilePost() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
           </Text>
         </Box>
-        <Button>Edit Bio</Button>
       </Flex>
-      <CreatePost height={"200px"} />
+      <CreatePost
+        height={{
+          base: "210px",
+          md: "230px",
+          lg: "230px"
+        }}
+      />
     </Flex>
   );
 }

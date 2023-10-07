@@ -9,7 +9,8 @@ import {
   MenuItem,
   MenuList,
   Text,
-  Textarea
+  Textarea,
+  useMediaQuery
 } from "@chakra-ui/react";
 import React from "react";
 import Person1 from "../../assets/images/person-1.jpg";
@@ -22,10 +23,16 @@ import { BsEmojiLaughing } from "react-icons/bs";
 
 function CreatePost(props) {
   const [isSelected, setIsSelected] = React.useState("");
+  const [isSmallerThan425] = useMediaQuery("(max-width: 425px)");
+
   return (
     <>
       <Flex
-        w="90%"
+        w={{
+          base: "100%",
+          md: "100%",
+          lg: "90%"
+        }}
         margin={"0 auto"}
         h={props.height ? props.height : "230px"}
         bg="white"
@@ -95,28 +102,90 @@ function CreatePost(props) {
           />
           <Flex
             justifyContent={"space-between"}
-            alignItems={"center"}
+            alignItems={{
+              base: "flex-end",
+              md: "center",
+              lg: "center"
+            }}
             mt={2}
-            w="100%"
+            w={{
+              base: "95%",
+              md: "100%",
+              lg: "100%"
+            }}
           >
-            <Flex gap={2}>
+            <Flex
+              gap={{
+                base: "2px",
+                md: "20px",
+                lg: "30px"
+              }}
+            >
               <Button background={"transparent"} align={"center"}>
-                <RiLiveFill color="red" fontSize={16} />
-                <Text ml={2} fontSize={14}>
-                  Live Video
-                </Text>
+                <RiLiveFill
+                  color="red"
+                  fontSize={{
+                    base: "20px",
+                    md: "25px",
+                    lg: "30px"
+                  }}
+                />
+                {isSmallerThan425 ? null : (
+                  <Text
+                    ml={2}
+                    fontSize={{
+                      base: "12px",
+                      md: "14px",
+                      lg: "16px"
+                    }}
+                  >
+                    Live Video
+                  </Text>
+                )}
               </Button>
               <Button background={"transparent"} align={"center"}>
-                <AiFillCamera color="#15855A" fontSize={16} />
-                <Text ml={2} fontSize={14}>
-                  Photo / Video
-                </Text>
+                <AiFillCamera
+                  color="#15855A"
+                  fontSize={{
+                    base: "20px",
+                    md: "25px",
+                    lg: "30px"
+                  }}
+                />
+                {isSmallerThan425 ? null : (
+                  <Text
+                    ml={2}
+                    fontSize={{
+                      base: "12px",
+                      md: "14px",
+                      lg: "16px"
+                    }}
+                  >
+                    Photo / Video
+                  </Text>
+                )}
               </Button>
               <Button background={"transparent"} align={"center"}>
-                <BsEmojiLaughing color="#E7D59B" fontSize={16} />
-                <Text ml={2} fontSize={14}>
-                  Feeling / Activity
-                </Text>
+                <BsEmojiLaughing
+                  color="#E7D59B"
+                  fontSize={{
+                    base: "20px",
+                    md: "25px",
+                    lg: "30px"
+                  }}
+                />
+                {isSmallerThan425 ? null : (
+                  <Text
+                    ml={2}
+                    fontSize={{
+                      base: "12px",
+                      md: "14px",
+                      lg: "16px"
+                    }}
+                  >
+                    Feeling / Activity
+                  </Text>
+                )}
               </Button>
             </Flex>
             <Button
@@ -124,8 +193,14 @@ function CreatePost(props) {
               color={"white"}
               borderRadius={10}
               px={10}
-              py={2}
-              fontSize={14}
+              py={{
+                base: "5px",
+                md: 3
+              }}
+              fontSize={{
+                base: "12px",
+                md: "14px"
+              }}
               fontWeight={"bold"}
               _hover={{
                 bg: "#0951af",

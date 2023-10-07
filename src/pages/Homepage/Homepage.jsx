@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import { Helmet } from "react-helmet";
 import { Sidebar, SidebarRight } from "../../components/Sidebar";
@@ -6,9 +6,25 @@ import { Box, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import Layout from "../Layout";
 import NewsFeed from "../../components/NewsFeed/NewsFeed";
 import SmallerScreen from "../SmallScreen/SmallerScreen";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Homepage() {
   const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const authListener = () => {
+  //     if (!user) {
+  //       navigate("/login");
+  //     } else {
+  //       navigate("/");
+  //     }
+  //   };
+  //   authListener();
+  // }, []);
+
   return (
     <>
       <Helmet>
@@ -26,6 +42,7 @@ function Homepage() {
         />
         <meta property="og:site_name" content="Paysbook" />
       </Helmet>
+
       {isLargerThan1280 ? (
         <Layout webName="Paysbook" bgColor="#EDEDED" paddingY={5}>
           <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>

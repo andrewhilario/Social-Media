@@ -87,9 +87,12 @@ function SmallScreenNav({ websiteName }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Hamburger Menu</DrawerHeader>
-          <DrawerBody>
+          <DrawerBody display={"flex"} flexDirection={"column"} gap={"10px"}>
             <Link to="/reels">
               <Text>Reels</Text>
+            </Link>
+            <Link to="/profile">
+              <Text>Profile</Text>
             </Link>
           </DrawerBody>
         </DrawerContent>

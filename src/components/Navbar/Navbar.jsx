@@ -5,17 +5,46 @@ import {
   Flex,
   Image,
   LinkBox,
-  transition
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+  transition,
+  Icon
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import LogoFC from "../Logo/Logo";
 import Notification from "../../assets/svg/Notification.svg";
 import Message from "../../assets/svg/Chat Bubble.svg";
 import Watch from "../../assets/svg/TVShowWhite.svg";
 import { SearchBar } from "../SearchBar";
 import Person1 from "../../assets/images/person-1.jpg";
+import { CgProfile } from "react-icons/cg";
+import { MdLogout } from "react-icons/md";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import DefaultAvatar from "../../assets/images/default-avatar.jpg";
 
 function Navbar({ websiteName, paddingVertical }) {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+  const [profilePicture, setProfilePicture] = React.useState(null);
+
+  const handleLogout = async () => {
+    try {
+      await logout("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.photoURL) {
+      setProfilePicture(user.photoURL);
+    }
+  }, []);
+
   return (
     <>
       <Flex
@@ -83,7 +112,30 @@ function Navbar({ websiteName, paddingVertical }) {
           gap={10}
         >
           <SearchBar searchBarWidth={"400px"} />
-          <Avatar src={Person1} />
+          <Menu>
+            <MenuButton>
+              <Avatar src={profilePicture} />
+            </MenuButton>
+            <MenuList py={"1.2rem"} px={".5rem"}>
+              <MenuItem borderRadius={"10px"}>
+                <Flex
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                  align={"center"}
+                >
+                  <CgProfile mr={4} boxSize={"1.5rem"} />
+                  <Text fontSize={"1.2rem"}>Profile</Text>
+                </Flex>
+              </MenuItem>
+              <MenuItem borderRadius={"10px"}>
+                <Flex onClick={handleLogout} align={"center"}>
+                  <MdLogout mr={4} boxSize={"1.5rem"} />
+                  <Text fontSize={"1.2rem"}>Logout</Text>
+                </Flex>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
       </Flex>
     </>
