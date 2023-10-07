@@ -81,12 +81,18 @@ function SmallScreenNav({ websiteName }) {
         placement="right"
         onClose={onClose}
         closeOnEsc
-        size={"full"}
+        size={"xs"}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Hamburger Menu</DrawerHeader>
+          <DrawerHeader display={"flex"} justifyContent={"flex-start"}>
+            <LogoFC
+              websiteName={"Paysbook"}
+              color={"#0C71F5"}
+              // subTitleWebsiteName={"Mobile"}
+            />
+          </DrawerHeader>
           <DrawerBody display={"flex"} flexDirection={"column"} gap={"10px"}>
             <Link to="/reels">
               <Text>Reels</Text>

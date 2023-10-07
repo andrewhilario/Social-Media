@@ -9,7 +9,11 @@ function LogoFC(props) {
     <>
       <Link to="/">
         <Flex
-          alignItems={"center"}
+          alignItems={{
+            base: "flex-start",
+            md: "center",
+            lg: "center"
+          }}
           mr={{
             base: 0,
             md: "24px"
