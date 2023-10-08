@@ -68,6 +68,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
 
       // on Success clear all the input fields
       reset();
+      onCloseModal();
     } catch (error) {
       console.log(error);
     }

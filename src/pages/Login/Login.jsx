@@ -23,11 +23,12 @@ import Form from "../../components/Form/Form";
 import { useAuth } from "../../context/AuthContext";
 import { auth } from "../../firebase/firebase";
 import { set, useForm } from "react-hook-form";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Login() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { login, user } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -40,8 +41,11 @@ export default function Login() {
   const handleLogin = async (data) => {
     try {
       setIsLoading(true);
-      const success = await login(data.email, data.password, "/");
-
+      const success = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
       if (success) {
         toast({
           position: "top",
@@ -51,9 +55,9 @@ export default function Login() {
           duration: 3000,
           isClosable: true
         });
-
         reset();
         setIsLoading(false);
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -65,19 +69,10 @@ export default function Login() {
         duration: 3000,
         isClosable: true
       });
-
       reset();
+      setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   const authListener = () => {
-  //     if (user) {
-  //       navigate("/");
-  //     }
-  //   };
-  //   authListener();
-  // }, [user]);
 
   return (
     <>

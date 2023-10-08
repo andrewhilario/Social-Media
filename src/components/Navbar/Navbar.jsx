@@ -124,13 +124,13 @@ function Navbar({ websiteName, paddingVertical }) {
                   }}
                   align={"center"}
                 >
-                  <CgProfile mr={4} boxSize={"1.5rem"} />
+                  <CgProfile mr={4} fontSize={"1.5rem"} />
                   <Text fontSize={"1.2rem"}>Profile</Text>
                 </Flex>
               </MenuItem>
               <MenuItem borderRadius={"10px"}>
                 <Flex onClick={handleLogout} align={"center"}>
-                  <MdLogout mr={4} boxSize={"1.5rem"} />
+                  <MdLogout mr={4} fontSize={"1.5rem"} />
                   <Text fontSize={"1.2rem"}>Logout</Text>
                 </Flex>
               </MenuItem>

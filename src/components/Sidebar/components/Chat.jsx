@@ -27,7 +27,7 @@ function Chat() {
           }}
         >
           <Avatar src={user.image}>
-            <AvatarBadge boxSize=".9em" bg="green.500" />
+            <AvatarBadge size=".9em" bg="green.500" />
           </Avatar>
           <Text ml={3} fontSize={16} fontWeight={"bold"}>
             {user.name}

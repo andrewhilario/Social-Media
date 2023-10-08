@@ -2,14 +2,19 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import Post from "../../../components/NewsFeed/Post";
 import CreatePost from "../../../components/NewsFeed/CreatePost";
+import { useAuth } from "../../../context/AuthContext";
+import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 
 function ProfilePost() {
+  const { user } = useAuth();
+  const { userOtherInfo } = useGetUserOtherInfo();
+
   return (
     <Flex
       w={{
         base: "100%",
         md: "100%",
-        lg: "90%"
+        lg: "100%"
       }}
       gap={5}
       direction={{
@@ -24,14 +29,17 @@ function ProfilePost() {
         borderRadius={15}
         p={4}
         my={3}
+        w={{
+          base: "100%",
+          md: "100%",
+          lg: "30%"
+        }}
       >
         <Text fontWeight={"semibold"} letterSpacing={1} fontSize={"2xl"} mb={5}>
           Bio
         </Text>
         <Box mb={10}>
-          <Text>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-          </Text>
+          <Text>{userOtherInfo?.bio}</Text>
         </Box>
       </Flex>
       <CreatePost

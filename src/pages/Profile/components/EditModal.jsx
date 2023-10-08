@@ -18,49 +18,126 @@ import { FiUpload } from "react-icons/fi";
 import { CloseIcon } from "@chakra-ui/icons";
 import { useAuth } from "../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
-import { auth, storage } from "../../../firebase/firebase";
+import { auth, db, storage } from "../../../firebase/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import useUpdateUser from "../../../hooks/useUpdateUser";
-import { onAuthStateChanged } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 function EditModal(props) {
   const [photoFile, setPhotoFile] = useState(null);
   const [image, setImage] = useState(null);
-  const { user } = useAuth();
   const { userOtherInfo, isLoading } = useGetUserOtherInfo();
   const [isUploading, setIsUploading] = useState(false);
   const toast = useToast();
+  const { user } = useAuth();
 
   const handlePhotoFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setPhotoFile(URL.createObjectURL(e.target.files[0]));
+      if (e.target.files[0].name.match(/\.(jpg|jpeg|png)$/)) {
+        if (e.target.files[0].size > 5_242_880) {
+          toast({
+            title: "File size is too large. Max size is 5MB.",
+            status: "error",
+            duration: 1000,
+            isClosable: true
+          });
+          return;
+        } else {
+          setPhotoFile(URL.createObjectURL(e.target.files[0]));
+          setImage(e.target.files[0]);
+        }
+      } else {
+        toast({
+          title: "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
+          status: "error",
+          duration: 1000,
+          isClosable: true
+        });
+        setPhotoFile(null);
+        setIsUploading(false);
+      }
+    } else {
+      console.log("No file selected");
     }
   };
-
+  // Handle profile photo change
   const handleProfileChange = () => {
-    setIsUploading(true);
-    if (photoFile) {
-      const imageRef = ref(storage, `profileImages/${user.uid}`);
-      const uploadTask = uploadBytes(imageRef, photoFile);
-
-      uploadTask.then((snapshot) => {
-        console.log(snapshot.ref.fullPath);
-      });
-
-      toast({
-        title: "Profile photo updated.",
-        status: "success",
-        duration: 1000,
-        isClosable: true
-      });
-    } else {
+    try {
+      setIsUploading(true);
+      if (photoFile) {
+        const imageRef = ref(
+          storage,
+          "images/" + user.uid + "/profileImage/" + image.name
+        );
+        uploadBytes(imageRef, image).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            updateProfile(auth.currentUser, {
+              photoURL: url
+            });
+            toast({
+              title: "Profile photo updated.",
+              status: "success",
+              duration: 1000,
+              isClosable: true
+            });
+            setIsUploading(false);
+            setPhotoFile(null);
+            props.onClose();
+          });
+        });
+      } else {
+        setIsUploading(false);
+        setPhotoFile(null);
+        toast({
+          title: "No photo selected.",
+          status: "error",
+          duration: 1000,
+          isClosable: true
+        });
+      }
+    } catch (error) {
+      console.log(error);
       setIsUploading(false);
-      toast({
-        title: "No photo selected.",
-        status: "error",
-        duration: 1000,
-        isClosable: true
-      });
+    }
+  };
+  // Handle cover photo change
+  const handleCoverChange = () => {
+    try {
+      setIsUploading(true);
+      if (photoFile) {
+        const imageRef = ref(
+          storage,
+          "images/" + user.uid + "/coverPhoto/" + image.name
+        );
+        uploadBytes(imageRef, image).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            const docRef = doc(db, "users", user.uid);
+            setDoc(docRef, { coverPhoto: url }, { merge: true });
+
+            setIsUploading(false);
+            toast({
+              title: "Cover photo updated.",
+              status: "success",
+              duration: 1000,
+              isClosable: true
+            });
+            setPhotoFile(null);
+            props.onClose();
+          });
+        });
+      } else {
+        setIsUploading(false);
+        setPhotoFile(null);
+        toast({
+          title: "No photo selected.",
+          status: "error",
+          duration: 1000,
+          isClosable: true
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setIsUploading(false);
     }
   };
 
@@ -96,7 +173,7 @@ function EditModal(props) {
                         p={0}
                         background={"whiteAlpha.500"}
                       >
-                        <CloseIcon color={"gray.700"} boxSize={"12px"} />
+                        <CloseIcon color={"gray.700"} fontSize={"12px"} />
                       </Button>
                     </Box>
                   </>
@@ -176,7 +253,7 @@ function EditModal(props) {
                         background={"whiteAlpha.500"}
                         // colorScheme="red"
                       >
-                        <CloseIcon color={"gray.700"} boxSize={"12px"} />
+                        <CloseIcon color={"gray.700"} fontSize={"12px"} />
                       </Button>
                     </Box>
                   </>
@@ -220,7 +297,12 @@ function EditModal(props) {
                 )}
               </FormControl>
               <Box display={"flex"} justifyContent={"flex-end"} mt={4}>
-                <Button colorScheme="facebook" onClick={props.onClose}>
+                <Button
+                  isLoading={isUploading}
+                  loadingText="Uploading"
+                  colorScheme="facebook"
+                  onClick={handleCoverChange}
+                >
                   Save
                 </Button>
               </Box>

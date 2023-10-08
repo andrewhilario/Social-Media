@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -28,14 +28,28 @@ import EditModal from "./EditModal";
 import { FaGlobeAsia, FaUserFriends, FaLock } from "react-icons/fa";
 import { useAuth } from "../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../../../firebase/firebase";
+import { useForm } from "react-hook-form";
+import { doc, setDoc } from "firebase/firestore";
 
 const UpdateProfileModal = ({ isOpen, onClose }) => {
   const [changeBio, setChangeBio] = useState(false);
   const [changeAudience, setChangeAudience] = useState("Public");
   const [photoType, setPhotoType] = useState("profile");
-
-  const { user } = useAuth();
+  const [profilePicture, setProfilePicture] = useState(null);
   const { userOtherInfo, isLoading } = useGetUserOtherInfo();
+  const [userProfile, setUserProfile] = useState(null);
+  const [userCover, setUserCover] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [charCounter, setCharCounter] = useState(0);
+  const { user } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
   const {
     isOpen: isEditModalOpen,
@@ -90,6 +104,40 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
     }
   }
 
+  const handleBioChange = async (data) => {
+    try {
+      setIsUploading(true);
+
+      const docRef = doc(db, "users", user.uid);
+      setDoc(
+        docRef,
+        {
+          bio: data.bio
+        },
+        { merge: true }
+      ).then(() => {
+        setIsUploading(false);
+        setChangeBio(false);
+      });
+    } catch (error) {
+      console.log(error);
+      setIsUploading(false);
+    }
+  };
+
+  useEffect(() => {
+    const authListener = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUserProfile(user?.photoURL);
+          setUserCover(userOtherInfo?.coverPhoto);
+        }
+      });
+    };
+
+    authListener();
+  }, []);
+
   return (
     <>
       <EditModal
@@ -120,7 +168,7 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                 </Button>
               </Flex>
               <Flex my={"1rem"} justify={"center"} align={"center"}>
-                <Avatar size={"2xl"} src={user?.photoURL ?? ""} />
+                <Avatar size={"2xl"} src={userProfile} />
               </Flex>
             </Flex>
             <Flex direction={"column"}>
@@ -144,7 +192,7 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                   h={"300px"}
                   backgroundColor={"gray.200"}
                   mb={4}
-                  backgroundImage={`url(${userOtherInfo?.coverPhoto ?? ""})`}
+                  backgroundImage={`url(${userOtherInfo?.coverPhoto})`}
                   backgroundSize={"cover"}
                   backgroundPosition={"center"}
                   borderRadius={"lg"}
@@ -176,75 +224,100 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
               {changeBio ? (
                 <>
                   <FormControl mt={4} p={"none"} m={"none"}>
-                    <Textarea placeholder="Write your Bio" />
+                    <Textarea
+                      placeholder="Write your Bio"
+                      maxLength={200}
+                      {...register("bio", {
+                        required: true,
+                        maxLength: 200
+                      })}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 200) {
+                          setCharCounter(e.target.value.length);
+                        } else {
+                        }
+                      }}
+                    />
                   </FormControl>
-                  <Flex justify={"flex-end"} align={"center"} mt={4}>
-                    <Menu>
-                      <MenuButton
-                        _hover={{
-                          background: "gray.200",
-                          transition: "background 0.2s ease-in-out"
-                        }}
-                        p={2}
-                        borderRadius={"md"}
+                  <Flex justify={"space-between"} align={"center"} mt={4}>
+                    <Text
+                      fontSize={"sm"}
+                      color={charCounter > 200 ? "red.500" : "gray.700"}
+                    >
+                      {charCounter}/200
+                    </Text>
+                    <Flex justify={"flex-end"} align={"center"} mt={4}>
+                      <Menu>
+                        <MenuButton
+                          _hover={{
+                            background: "gray.200",
+                            transition: "background 0.2s ease-in-out"
+                          }}
+                          p={2}
+                          borderRadius={"md"}
+                        >
+                          {handleChangeAudience()}
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem onClick={() => setChangeAudience("Public")}>
+                            <Flex align={"center"} gap={2}>
+                              <FaGlobeAsia />
+                              <Text fontSize={"sm"} color={"gray.700"}>
+                                Public
+                              </Text>
+                            </Flex>
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => setChangeAudience("Friends")}
+                          >
+                            <Flex align={"center"} gap={2}>
+                              <FaUserFriends />
+                              <Text fontSize={"sm"} color={"gray.700"}>
+                                Friends
+                              </Text>
+                            </Flex>
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => setChangeAudience("Only Me")}
+                          >
+                            <Flex align={"center"} gap={2}>
+                              <FaLock />
+                              <Text fontSize={"sm"} color={"gray.700"}>
+                                Only Me
+                              </Text>
+                            </Flex>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                      <Button
+                        variant={"ghost"}
+                        colorScheme={"blue"}
+                        size={"sm"}
+                        fontSize={"sm"}
+                        ml={4}
+                        isLoading={isUploading}
+                        loadingText={"Submitting..."}
+                        onClick={handleSubmit(handleBioChange)}
                       >
-                        {handleChangeAudience()}
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem onClick={() => setChangeAudience("Public")}>
-                          <Flex align={"center"} gap={2}>
-                            <Icon as={FaGlobeAsia} />
-                            <Text fontSize={"sm"} color={"gray.700"}>
-                              Public
-                            </Text>
-                          </Flex>
-                        </MenuItem>
-                        <MenuItem onClick={() => setChangeAudience("Friends")}>
-                          <Flex align={"center"} gap={2}>
-                            <Icon as={FaUserFriends} />
-                            <Text fontSize={"sm"} color={"gray.700"}>
-                              Friends
-                            </Text>
-                          </Flex>
-                        </MenuItem>
-                        <MenuItem onClick={() => setChangeAudience("Only Me")}>
-                          <Flex align={"center"} gap={2}>
-                            <Icon as={FaLock} />
-                            <Text fontSize={"sm"} color={"gray.700"}>
-                              Only Me
-                            </Text>
-                          </Flex>
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                    <Button
-                      variant={"ghost"}
-                      colorScheme={"blue"}
-                      size={"sm"}
-                      fontSize={"sm"}
-                      ml={4}
-                      onClick={() => setChangeBio(!changeBio)}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      variant={"ghost"}
-                      colorScheme={"blue"}
-                      size={"sm"}
-                      fontSize={"sm"}
-                      onClick={() => setChangeBio(!changeBio)}
-                    >
-                      Cancel
-                    </Button>
+                        Submit
+                      </Button>
+                      <Button
+                        variant={"ghost"}
+                        colorScheme={"blue"}
+                        size={"sm"}
+                        fontSize={"sm"}
+                        onClick={() => setChangeBio(!changeBio)}
+                      >
+                        Cancel
+                      </Button>
+                    </Flex>
                   </Flex>
                 </>
               ) : (
                 <>
                   <Box p={"1rem"} textAlign={"center"}>
                     <Text color={"gray.700"}>
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Facere fugiat amet itaque suscipit neque voluptatibus
-                      laboriosam! Voluptate porro modi aliquid.
+                      {userOtherInfo?.bio ? userOtherInfo?.bio : "Add your Bio"}
                     </Text>
                   </Box>
                 </>
