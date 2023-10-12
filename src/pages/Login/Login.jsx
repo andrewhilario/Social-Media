@@ -94,7 +94,7 @@ export default function Login() {
         >
           {/* <Box bg={"white"} width={"100px"} height={"100px"}> */}
           <LogoFC
-            websiteName={"paysbook"}
+            websiteName={"um connect"}
             subTitleWebsiteName={"Connect, Share and Earn"}
             color={"blue.500"}
             subColor={"#000"}

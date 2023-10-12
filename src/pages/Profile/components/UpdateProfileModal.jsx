@@ -22,7 +22,8 @@ import {
   MenuButton,
   Icon,
   MenuList,
-  MenuItem
+  MenuItem,
+  Image
 } from "@chakra-ui/react";
 import EditModal from "./EditModal";
 import { FaGlobeAsia, FaUserFriends, FaLock } from "react-icons/fa";
@@ -168,7 +169,7 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                 </Button>
               </Flex>
               <Flex my={"1rem"} justify={"center"} align={"center"}>
-                <Avatar size={"2xl"} src={userProfile} />
+                {userProfile && <Avatar size={"2xl"} src={userProfile} />}
               </Flex>
             </Flex>
             <Flex direction={"column"}>
@@ -192,7 +193,6 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                   h={"300px"}
                   backgroundColor={"gray.200"}
                   mb={4}
-                  backgroundImage={`url(${userOtherInfo?.coverPhoto})`}
                   backgroundSize={"cover"}
                   backgroundPosition={"center"}
                   borderRadius={"lg"}
@@ -201,7 +201,14 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                   justifyContent={"center"}
                   alignItems={"center"}
                 >
-                  {!userOtherInfo?.coverPhoto && <Avatar size={"2xl"} />}
+                  {userCover && (
+                    <Image
+                      src={userCover}
+                      w={"100%"}
+                      h={"100%"}
+                      objectFit={"cover"}
+                    />
+                  )}
                 </Box>
               </Flex>
             </Flex>

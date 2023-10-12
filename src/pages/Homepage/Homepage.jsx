@@ -48,7 +48,7 @@ function Homepage() {
         </Helmet>
 
         {isLargerThan1280 ? (
-          <Layout webName="Paysbook" bgColor="#EDEDED" paddingY={5}>
+          <Layout webName="UM Connect" bgColor="#EDEDED" paddingY={5}>
             <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>
               <GridItem p={5}>
                 <Sidebar />

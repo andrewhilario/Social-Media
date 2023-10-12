@@ -44,7 +44,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = auth.currentUser;
-      user.displayName = `${data.firstName} ${data.lastName}`;
+      user.displayName = data.firstName + " " + data.lastName;
       user.phoneNumber = data.mobileNumber;
 
       await setDoc(doc(db, "users", user.uid), {

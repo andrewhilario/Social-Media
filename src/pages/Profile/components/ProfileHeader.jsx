@@ -54,6 +54,7 @@ function ProfileHeader(props) {
               backgroundColor={"gray.200"}
               backgroundSize={"cover"}
               backgroundPosition={"center"}
+              border={"3px solid #EDEDED"}
               w={{
                 base: "100%",
                 md: "90%",
