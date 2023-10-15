@@ -10,11 +10,14 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebase/firebase";
 import { collection, doc, getDoc, query, where } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useParams } from "react-router-dom";
 
 function ProfilePost() {
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { posts } = usePosts();
+
+  const { username } = useParams();
 
   return (
     <Flex
@@ -58,14 +61,17 @@ function ProfilePost() {
           lg: "60%"
         }}
       >
-        <CreatePost
-          width={"100%"}
-          height={{
-            base: "210px",
-            md: "230px",
-            lg: "230px"
-          }}
-        />
+        {username ? null : (
+          <CreatePost
+            width={"100%"}
+            height={{
+              base: "210px",
+              md: "230px",
+              lg: "230px"
+            }}
+          />
+        )}
+
         {posts?.length === 0 ? (
           <>
             <Text
@@ -80,21 +86,23 @@ function ProfilePost() {
         ) : (
           posts?.map((post, index) => {
             return (
-              <Post
-                key={index}
-                width={"100%"}
-                postUser={post?.postUser}
-                postUserImage={post?.postUserImage ?? ""}
-                post={post?.post}
-                postImages={post?.postImages}
-                postDateTime={
-                  formatDistance(
-                    new Date(post?.createdAt?.toDate()),
-                    new Date()
-                  ) + " ago"
-                }
-                postVisibility={post?.postVisibility}
-              />
+              post?.authorId === user?.uid && (
+                <Post
+                  key={index}
+                  width={"100%"}
+                  postUser={post?.postUser}
+                  postUserImage={post?.postUserImage ?? null}
+                  post={post?.post}
+                  postImages={post?.postImages}
+                  postDateTime={
+                    formatDistance(
+                      new Date(post?.createdAt?.toDate()),
+                      new Date()
+                    ) + " ago"
+                  }
+                  postVisibility={post?.postVisibility}
+                />
+              )
             );
           })
         )}

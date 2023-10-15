@@ -157,7 +157,10 @@ function CreatePost(props) {
         p={3}
         my={3}
       >
-        <Avatar src={user?.photoURL} />
+        <Avatar
+          name={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+          src={user?.photoURL}
+        />
         <Box ml={3} w="100%">
           <Text fontWeight="bold">
             {user?.displayName ??
@@ -292,7 +295,7 @@ function CreatePost(props) {
                 lg: "30px"
               }}
             >
-              <Button background={"transparent"} align={"center"}>
+              {/* <Button background={"transparent"} align={"center"}>
                 <RiLiveFill
                   color="red"
                   fontSize={{
@@ -313,7 +316,7 @@ function CreatePost(props) {
                     Live Video
                   </Text>
                 )}
-              </Button>
+              </Button> */}
               <FormLabel
                 htmlFor="upload"
                 background={"transparent"}

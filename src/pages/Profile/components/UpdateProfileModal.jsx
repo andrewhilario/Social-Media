@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {
   Modal,
@@ -169,7 +170,15 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                 </Button>
               </Flex>
               <Flex my={"1rem"} justify={"center"} align={"center"}>
-                {userProfile && <Avatar size={"2xl"} src={userProfile} />}
+                {userProfile && (
+                  <Avatar
+                    name={
+                      userOtherInfo?.firstName + " " + userOtherInfo?.lastName
+                    }
+                    size={"2xl"}
+                    src={userProfile}
+                  />
+                )}
               </Flex>
             </Flex>
             <Flex direction={"column"}>
@@ -242,6 +251,7 @@ const UpdateProfileModal = ({ isOpen, onClose }) => {
                         if (e.target.value.length <= 200) {
                           setCharCounter(e.target.value.length);
                         } else {
+                          setCharCounter(200);
                         }
                       }}
                     />

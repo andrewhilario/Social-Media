@@ -5,12 +5,12 @@ import { getStorage } from "firebase/storage";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDMey203nIlWeaNES9bt6wG7MQy9O5ZREg",
-  authDomain: "paysbook-social.firebaseapp.com",
-  projectId: "paysbook-social",
-  storageBucket: "paysbook-social.appspot.com",
-  messagingSenderId: "240526928699",
-  appId: "1:240526928699:web:d1154f43b7d44a4623e51e"
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID
 };
 // const firebaseConfig = {
 //   apiKey: "AIzaSyCOtLqyC3TBquSYo5DzAghhSRtzqgDcvAo",

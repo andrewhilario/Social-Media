@@ -32,19 +32,19 @@ function Homepage() {
     return (
       <>
         <Helmet>
-          <title>Home | Paysbook</title>
-          <meta name="title" content="Paysbook" />
+          <title>Home | UM Connect</title>
+          <meta name="title" content="UM Connect" />
           <meta
             name="description"
             content="Discover the future of financial empowerment with Paysbook. Join our community of smart earners, investors, and dreamers. Earn, save, and invest seamlessly while building a brighter tomorrow. Get started today!"
           />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="Paysbook" />
+          <meta property="og:title" content="UM Connect" />
           <meta
             property="og:description"
             content="Discover the future of financial empowerment with Paysbook. Join our community of smart earners, investors, and dreamers. Earn, save, and invest seamlessly while building a brighter tomorrow. Get started today!"
           />
-          <meta property="og:site_name" content="Paysbook" />
+          <meta property="og:site_name" content="UM Connect" />
         </Helmet>
 
         {isLargerThan1280 ? (

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
@@ -44,7 +45,8 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = auth.currentUser;
-      user.displayName = data.firstName + " " + data.lastName;
+      const fullName = `${data.firstName} ${data.lastName}`;
+      user.displayName = fullName;
       user.phoneNumber = data.mobileNumber;
 
       await setDoc(doc(db, "users", user.uid), {
@@ -52,6 +54,8 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
         lastName: data.lastName,
         birthday: data.birthday,
         gender: data.gender,
+        username: data.username,
+        // userUid: user.uid,
         coverPhoto: "",
         bio: ""
       });
@@ -137,6 +141,19 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
                 {errors.email && (
                   <Text color={"red.500"} fontSize={"xs"} mt={"5px"}>
                     Email is required
+                  </Text>
+                )}
+              </FormControl>
+              <FormControl mt={4}>
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  {...register("username", { required: true })}
+                  {...(errors.username && { isInvalid: true })}
+                />
+                {errors.email && (
+                  <Text color={"red.500"} fontSize={"xs"} mt={"5px"}>
+                    Username is required
                   </Text>
                 )}
               </FormControl>

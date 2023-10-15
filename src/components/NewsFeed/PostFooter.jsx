@@ -15,11 +15,15 @@ import {
 } from "react-icons/bi";
 import { BsSendFill } from "react-icons/bs";
 import { FaShare } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext";
+import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 
 function PostFooter() {
   const [isLiked, setIsLiked] = React.useState(false);
   const [likes, setLikes] = React.useState(0);
   const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
+  const { user } = useAuth();
+  const { userOtherInfo } = useGetUserOtherInfo();
 
   const handleToggle = () => {
     setIsLiked(!isLiked);
@@ -96,7 +100,11 @@ function PostFooter() {
         </Flex>
       </Flex>
       <Flex mt={4} align={"center"}>
-        <Avatar size={"sm"} />
+        <Avatar
+          name={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+          src={user?.photoURL ?? null}
+          size={"sm"}
+        />
         <Input ml={2} placeholder="Write a comment..." borderRadius={"full"} />
 
         <Button

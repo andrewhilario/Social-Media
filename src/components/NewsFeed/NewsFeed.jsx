@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../hooks/usePosts";
 import { formatDistance } from "date-fns";
-import { Center, Spinner } from "@chakra-ui/react";
+import { Center, Spinner, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -21,7 +21,7 @@ function NewsFeed() {
   const [postUserImage, setPostUserImage] = React.useState(null);
 
   useEffect(() => {
-    console.log(posts);
+    // console.log(posts.map((post) => post?.authorId));
 
     const authListener = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -68,31 +68,24 @@ function NewsFeed() {
         </Center>
       ) : (
         posts?.map((post, index) => {
-          const authorId = post?.authorId;
-          const docRef = doc(db, "users", authorId);
-
-          getDoc(docRef).then((doc) => {
-            if (doc.exists()) {
-              setPostUser(doc.data().firstName + " " + doc.data().lastName);
-            } else {
-              console.log("No such document!");
-            }
-          });
-
           return (
-            <Post
-              postUser={post?.postUser}
-              postUserImage={post?.postUserImage ?? ""}
-              post={post?.post}
-              postImages={post?.postImages}
-              postDateTime={
-                formatDistance(
-                  new Date(post?.createdAt?.toDate()),
-                  new Date()
-                ) + " ago"
-              }
-              postVisibility={post?.postVisibility}
-            />
+            post?.postVisibility === "Public" && (
+              <Post
+                key={index}
+                postUser={post?.postUser}
+                postUserImage={post?.postUserImage ?? ""}
+                post={post?.post}
+                postImages={post?.postImages}
+                postDateTime={
+                  formatDistance(
+                    new Date(post?.createdAt?.toDate()),
+                    new Date()
+                  ) + " ago"
+                }
+                postVisibility={post?.postVisibility}
+                userUid={post?.authorId}
+              />
+            )
           );
         })
       )}
