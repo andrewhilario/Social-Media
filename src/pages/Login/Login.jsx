@@ -11,7 +11,8 @@ import {
   useDisclosure,
   Alert,
   AlertIcon,
-  useToast
+  useToast,
+  Text
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -50,7 +51,7 @@ export default function Login() {
         toast({
           position: "top",
           title: "Login Success",
-          description: "Welcome back to Paysbook",
+          description: "Welcome back to UM Connect",
           status: "success",
           duration: 3000,
           isClosable: true
@@ -77,7 +78,7 @@ export default function Login() {
   return (
     <>
       <Helmet>
-        <title>Login | Paysbook</title>
+        <title>Login | UM Connect</title>
       </Helmet>
       <CreateAccountModal isOpenModal={isOpen} onCloseModal={onClose} />
 
@@ -94,7 +95,7 @@ export default function Login() {
         >
           {/* <Box bg={"white"} width={"100px"} height={"100px"}> */}
           <LogoFC
-            websiteName={"paysbook"}
+            websiteName={"um connect"}
             subTitleWebsiteName={"Connect, Share and Earn"}
             color={"blue.500"}
             subColor={"#000"}

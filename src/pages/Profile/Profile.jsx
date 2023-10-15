@@ -7,15 +7,6 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  // }, []);
-
   return (
     <>
       <Helmet>

@@ -18,16 +18,17 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import coverPhoto from "../../../assets/images/cover-photo.jpg";
-import ProfilePost from "./ProfilePost";
+import ProfilePost from "../../Profile/components/ProfilePost";
 import { FiEdit } from "react-icons/fi";
-import UpdateProfileModal from "./UpdateProfileModal";
+
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { useAuth } from "../../../context/AuthContext";
 import ProfileLoader from "../../../loaders/ProfileLoader";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiUserPlus } from "react-icons/bi";
+import UpdateProfileModal from "../../Profile/components/UpdateProfileModal";
 
-function ProfileHeader() {
+function ViewProfileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { userOtherInfo, isLoading } = useGetUserOtherInfo();
   const { user } = useAuth();
@@ -36,6 +37,16 @@ function ProfileHeader() {
   const [userCover, setUserCover] = useState(null);
 
   // Params
+  const { username } = useParams();
+
+  function getProfile() {
+    const userUid = window.localStorage.getItem("userUid");
+    console.log(userUid);
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <>
@@ -139,25 +150,19 @@ function ProfileHeader() {
 
               <Flex gap={5}>
                 <Button
-                  leftIcon={<AddIcon />}
                   bg="#0C71F5"
                   color={"white"}
                   _hover={{
                     bg: "#0C71F5"
                   }}
                 >
-                  Add Reels
-                </Button>
-                <Button
-                  onClick={onOpen}
-                  leftIcon={<EditIcon />}
-                  bg="#0C71F5"
-                  color={"white"}
-                  _hover={{
-                    bg: "#0C71F5"
-                  }}
-                >
-                  Edit Profile
+                  <BiUserPlus
+                    fontSize={"1.5rem"}
+                    style={{
+                      marginRight: "5px"
+                    }}
+                  />
+                  Add Friend
                 </Button>
                 <Button
                   bg="#0C71F5"
@@ -300,4 +305,4 @@ function ProfileHeader() {
   );
 }
 
-export default ProfileHeader;
+export default ViewProfileHeader;

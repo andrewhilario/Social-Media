@@ -12,11 +12,11 @@ function Layout({ children, webName, bgColor, paddingY }) {
       <Box bg={bgColor} w={"100%"}>
         {isLargerThan1280 ? (
           <Navbar
-            websiteName={webName ? webName : "Paysbook"}
+            websiteName={webName ? webName : "UM Connect"}
             paddingVertical={paddingY ? paddingY : 5}
           />
         ) : (
-          <SmallScreenNav websiteName={webName ? webName : "Paysbook"} />
+          <SmallScreenNav websiteName={webName ? webName : "UM Connect"} />
         )}
         {children}
       </Box>

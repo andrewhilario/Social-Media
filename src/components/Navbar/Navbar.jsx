@@ -25,11 +25,13 @@ import { MdLogout } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "../../assets/images/default-avatar.jpg";
+import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 
 function Navbar({ websiteName, paddingVertical }) {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = React.useState(null);
+  const { userOtherInfo } = useGetUserOtherInfo();
 
   const handleLogout = async () => {
     try {
@@ -114,7 +116,10 @@ function Navbar({ websiteName, paddingVertical }) {
           <SearchBar searchBarWidth={"400px"} />
           <Menu>
             <MenuButton>
-              <Avatar src={profilePicture} />
+              <Avatar
+                name={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+                src={profilePicture}
+              />
             </MenuButton>
             <MenuList py={"1.2rem"} px={".5rem"}>
               <MenuItem borderRadius={"10px"}>

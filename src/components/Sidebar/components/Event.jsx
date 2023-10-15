@@ -71,11 +71,11 @@ function Event() {
         </Card>
         <Flex direction={"column"} gap={1}>
           <Text fontWeight={"bold"} fontSize={20}>
-            Suntukan sa Ace Hardware
+            Seminar
           </Text>
           <Flex align={"center"}>
             <IoLocationSharp />
-            <Text ml={1}>Ace Hardware sa may kanto</Text>
+            <Text ml={1}>Tandang Balara</Text>
           </Flex>
           <Text
             fontSize={14}

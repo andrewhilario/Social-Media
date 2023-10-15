@@ -71,7 +71,7 @@ function EditModal(props) {
         );
         uploadBytes(imageRef, image).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            updateProfile(auth.currentUser, {
+            updateProfile(user, {
               photoURL: url
             });
             toast({

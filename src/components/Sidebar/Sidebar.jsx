@@ -15,15 +15,20 @@ import { FaShoppingCart } from "react-icons/fa";
 import Watch from "../../assets/svg/TV Show.svg";
 import Reels from "../../assets/svg/Reels.svg";
 import Person1 from "../../assets/images/person-1.jpg";
+import { useAuth } from "../../context/AuthContext";
+import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 
 function Sidebar() {
+  const { user } = useAuth();
+  const { userOtherInfo } = useGetUserOtherInfo();
+
   return (
     <>
       <Flex direction={"column"}>
         <SidebarItem
           to="/profile"
-          icon={<Avatar src={Person1} border={"2px solid #0C71F5"} />}
-          text={"Mary Jane Doe"}
+          icon={<Avatar src={user?.photoURL} border={"2px solid #0C71F5"} />}
+          text={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
         />
         <SidebarItem
           icon={<HiUsers color="#0C71F5" fontSize={32} />}
