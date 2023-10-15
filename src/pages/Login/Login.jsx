@@ -12,7 +12,8 @@ import {
   Alert,
   AlertIcon,
   useToast,
-  Text
+  Text,
+  useMediaQuery
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -27,6 +28,7 @@ import { set, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Login() {
+  const isSmallScreen = useMediaQuery("(max-width: 425px)");
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = useAuth();
@@ -83,17 +85,32 @@ export default function Login() {
       <CreateAccountModal isOpenModal={isOpen} onCloseModal={onClose} />
 
       <Grid
-        templateColumns={"repeat(2, 1fr)"}
-        backgroundColor={"#F0F2F5"}
-        height={"100vh"}
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          lg: "repeat(2, 1fr)"
+        }}
+        backgroundColor={{
+          base: "white",
+          lg: "transparent"
+        }}
+        height={{
+          base: "70vh",
+          lg: "100vh"
+        }}
       >
         <GridItem
           colSpan={1}
           display={"flex"}
           justifyContent={"center"}
-          alignItems={"center"}
+          alignItems={{
+            base: "flex-end",
+            lg: "center"
+          }}
+          mb={{
+            base: "1rem",
+            lg: "0"
+          }}
         >
-          {/* <Box bg={"white"} width={"100px"} height={"100px"}> */}
           <LogoFC
             websiteName={"um connect"}
             subTitleWebsiteName={"Connect, Share and Earn"}
@@ -106,6 +123,7 @@ export default function Login() {
           />
           {/* </Box> */}
         </GridItem>
+
         <form
           onSubmit={handleSubmit(handleLogin)}
           style={{
@@ -117,19 +135,30 @@ export default function Login() {
           }}
         >
           <GridItem
-            width={"100%"}
+            width={{
+              base: "100vw",
+              lg: "100%"
+            }}
             colSpan={1}
             display={"flex"}
             justifyContent={"flex-start"}
             alignItems={"center"}
           >
             <Card
+              margin={"0 auto"}
               py={"3rem"}
               px={"2rem"}
               display={"flex"}
               flexDirection={"column"}
               gap={"1rem"}
-              width={"55%"}
+              width={{
+                base: "90%",
+                lg: "55%"
+              }}
+              boxShadow={{
+                base: "2xl",
+                lg: "0px 4px 4px rgba(0, 0, 0, 0.25)"
+              }}
             >
               <FormControl>
                 <Input

@@ -85,6 +85,10 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
         onClose={onCloseModal}
         isCentered
         motionPreset="slideInBottom"
+        size={{
+          base: "sm",
+          lg: "md"
+        }}
       >
         <ModalOverlay backdropFilter="blur(5px)" />
         <ModalContent>

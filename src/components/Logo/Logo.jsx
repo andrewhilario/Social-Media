@@ -22,8 +22,14 @@ function LogoFC(props) {
           flexDirection={"column"}
         >
           <Text
-            fontSize={props.mainTextFontSize ?? "4xl"}
-            fontWeight={props.mainTextFontWeight ?? "medium"}
+            fontSize={{
+              base: "5xl",
+              lg: props.mainTextFontSize ?? "4xl"
+            }}
+            fontWeight={{
+              base: "bold",
+              lg: props.mainTextFontWeight ?? "bold"
+            }}
             color={props.color ?? "white"}
           >
             {props.websiteName}
@@ -31,7 +37,10 @@ function LogoFC(props) {
           <Text
             textAlign={"center"}
             color={props.subColor}
-            fontSize={props.subTextFontSize ?? "md"}
+            fontSize={{
+              base: "2xl",
+              lg: props.subTextFontSize ?? "2xl"
+            }}
             fontWeight={"medium"}
           >
             {props.subTitleWebsiteName ?? ""}
