@@ -5,8 +5,13 @@ import {
   Flex,
   FormLabel,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
   Textarea,
+  VStack,
   useMediaQuery,
   useToast
 } from "@chakra-ui/react";
@@ -20,7 +25,9 @@ import { useForm } from "react-hook-form";
 import { useCreatePost } from "../../../../hooks/usePosts";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../../../firebase/firebase";
-import { CloseIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
+import { MdOutlinePublic } from "react-icons/md";
+import { BiSolidLockAlt } from "react-icons/bi";
 
 function CreatePostSM() {
   const [isSelected, setIsSelected] = useState("Public");
@@ -142,7 +149,46 @@ function CreatePostSM() {
   return (
     <>
       <Flex align={"center"} px={2} py={1} gap={3}>
-        <Avatar src={user?.photoURL} size={"sm"} />
+        <VStack align={"center"} justify={"center"} spacing={0}>
+          <Avatar src={user?.photoURL} size={"sm"} />
+          <Menu w={"100px"}>
+            <MenuButton
+              as={Button}
+              px={0}
+              m={0}
+              py={0}
+              bg="none"
+              _hover={{ bg: "none" }}
+              _focus={{ bg: "none" }}
+              _active={{ bg: "none" }}
+              rightIcon={<ChevronDownIcon />}
+            >
+              {isSelected === "Private" ? (
+                <BiSolidLockAlt />
+              ) : (
+                <MdOutlinePublic />
+              )}
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                onClick={() => {
+                  setIsSelected("Public");
+                }}
+              >
+                <MdOutlinePublic />
+                <Text ml={2}>Public</Text>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setIsSelected("Private");
+                }}
+              >
+                <BiSolidLockAlt />
+                <Text ml={2}>Private</Text>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </VStack>
         <Box w={"100%"}>
           {onFocus ? (
             <Input

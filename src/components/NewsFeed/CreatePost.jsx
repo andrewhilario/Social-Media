@@ -184,7 +184,6 @@ function CreatePost(props) {
                 )
               }
               rightIcon={<ChevronDownIcon />}
-              Icon
             >
               <Text fontSize={14}>{isSelected ? isSelected : "Public"}</Text>
             </MenuButton>
