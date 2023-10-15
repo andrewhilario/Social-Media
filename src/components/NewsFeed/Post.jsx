@@ -54,7 +54,7 @@ function Post({
         <Grid
           templateColumns="repeat(2, 1fr)"
           gap={2}
-          mt={postImageArray.length === 0 ? "1rem" : "0"}
+          mt={postImageArray.length === 0 ? "0" : "1rem"}
           borderRadius={"10px"}
         >
           {imagePost[0].length !== 0 && imagePost[0].length === 3 ? (
@@ -96,6 +96,7 @@ function Post({
                   colSpan={"repeat(2, 1fr)"}
                 >
                   <Image
+                    borderRadius={"inherit"}
                     w={postImageArray.length === 1 && "100%"}
                     h={postImageArray.length === 1 && "100%"}
                     src={image.replace(/[['"]+/g, "")}
