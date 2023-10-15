@@ -89,16 +89,16 @@ function Post({
             </>
           ) : (
             postImageArray.map((image, index) => {
-              image.length > 0 && (
+              return (
                 <GridItem
                   borderRadius={"inherit"}
                   key={index}
-                  colSpan={imagePost[0].length === 1 ? 2 : 1}
+                  colSpan={"repeat(2, 1fr)"}
                 >
                   <Image
-                    // w={postImageArray.length === 1 && "100%"}
-                    // h={postImageArray.length === 1 && "100%"}
-                    src={image.replace(/[['"]+/g, "") ?? null}
+                    w={postImageArray.length === 1 && "100%"}
+                    h={postImageArray.length === 1 && "100%"}
+                    src={image.replace(/[['"]+/g, "")}
                     objectFit={"cover"}
                   />
                 </GridItem>
