@@ -88,7 +88,7 @@ function SmallScreenNav({ websiteName }) {
           <DrawerCloseButton />
           <DrawerHeader display={"flex"} justifyContent={"flex-start"}>
             <LogoFC
-              websiteName={"Paysbook"}
+              websiteName={"UM Connect"}
               color={"#0C71F5"}
               // subTitleWebsiteName={"Mobile"}
             />

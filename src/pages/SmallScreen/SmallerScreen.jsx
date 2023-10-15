@@ -29,7 +29,7 @@ function SmallerScreen() {
 
   return (
     <>
-      <Layout webName="Paysbook" bgColor="white" paddingY={5}>
+      <Layout webName="UM Connect" bgColor="white" paddingY={5}>
         <Tabs isFitted onChange={(index) => setIsSelected(index)}>
           <TabList>
             <Tab>
