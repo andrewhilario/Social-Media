@@ -54,7 +54,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
         lastName: data.lastName,
         birthday: data.birthday,
         gender: data.gender,
-        username: data.username,
+        // username: data.username,
         // userUid: user.uid,
         coverPhoto: "",
         bio: ""
@@ -144,7 +144,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
                   </Text>
                 )}
               </FormControl>
-              <FormControl mt={4}>
+              {/* <FormControl mt={4}>
                 <Input
                   type="text"
                   placeholder="Username"
@@ -156,7 +156,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
                     Username is required
                   </Text>
                 )}
-              </FormControl>
+              </FormControl> */}
               <FormControl mt={4}>
                 <Input
                   type="number"
