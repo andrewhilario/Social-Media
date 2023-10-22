@@ -11,6 +11,7 @@ import { Center, Spinner, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 function NewsFeed() {
   const { user } = useAuth();
@@ -19,6 +20,8 @@ function NewsFeed() {
 
   const [postUser, setPostUser] = React.useState("");
   const [postUserImage, setPostUserImage] = React.useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // console.log(posts.map((post) => post?.authorId));
@@ -71,6 +74,9 @@ function NewsFeed() {
           return (
             post?.postVisibility === "Public" && (
               <Post
+                onPostClick={() => {
+                  navigate(`/post/${post?.postId}`);
+                }}
                 key={index}
                 postUser={post?.postUser}
                 postUserImage={post?.postUserImage ?? ""}
@@ -83,7 +89,8 @@ function NewsFeed() {
                   ) + " ago"
                 }
                 postVisibility={post?.postVisibility}
-                userUid={post?.authorId}
+                postAuthorId={post.authorId}
+                postId={post?.postId}
               />
             )
           );

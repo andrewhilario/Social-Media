@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import {
   Modal,
@@ -29,7 +30,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         <ModalContent>
           <ModalHeader>
             <LogoFC
-              websiteName={"Paysbook"}
+              websiteName={"UM Connect"}
               color={"blue.600"}
               mainTextFontSize={"6xl"}
               mainTextFontWeight={"bold"}
@@ -43,7 +44,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             alignItems={"center"}
           >
             <Heading textAlign={"center"} size={"lg"} color={"blue.600"}>
-              Welcome to Paysbook Social Media
+              Welcome to UM Connect!
             </Heading>
             <Text textAlign={"center"} mt={5}>
               Here you can connect with your friends and family. You can also

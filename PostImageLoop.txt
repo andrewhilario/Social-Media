@@ -1,0 +1,59 @@
+{imagePost[0].length !== 0 && imagePost[0].length === 3 ? (
+            <Text>
+              <GridItem colSpan={2} borderRadius={"inherit"}>
+                {imagePost[0][0] && (
+                  <Image
+                    borderRadius={"inherit"}
+                    src={imagePost[0][0].replace(/[['"]+/g, "")}
+                    objectFit={"cover"}
+                  />
+                )}
+              </GridItem>
+              <GridItem colSpan={1} borderRadius={"inherit"}>
+                {imagePost[0][1] && (
+                  <Image
+                    src={imagePost[0][1].replace(/[['"]+/g, "")}
+                    objectFit={"cover"}
+                    borderRadius={"inherit"}
+                  />
+                )}
+              </GridItem>
+              <GridItem colSpan={1} borderRadius={"inherit"}>
+                {imagePost[0][2] && (
+                  <Image
+                    w="100%"
+                    borderRadius={"inherit"}
+                    src={imagePost[0][2].replace(/[['"]+/g, "")}
+                    objectFit={"cover"}
+                  />
+                )}
+              </GridItem>
+            </Text>
+          ) : (
+            postImageArray &&
+            postImageArray.map((image, index) => {
+              if (image !== 0) {
+                return (
+                  <GridItem
+                    borderRadius={"inherit"}
+                    key={index}
+                    colSpan={postImageArray.length === 1 && 2}
+                    background={"#878787"}
+                  >
+                    <Image
+                      alignSelf={"center"}
+                      borderRadius={"inherit"}
+                      w={postImageArray.length === 1 && "100%"}
+                      h={postImageArray.length === 1 && "800px"}
+                      src={image.replace(/[['"]+/g, "")}
+                      objectFit={"contain"}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  </GridItem>
+                );
+              }
+            })
+          )}

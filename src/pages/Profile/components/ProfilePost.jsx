@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "../../../components/NewsFeed/Post";
 import CreatePost from "../../../components/NewsFeed/CreatePost";
 import { useAuth } from "../../../context/AuthContext";
@@ -8,16 +9,68 @@ import { usePosts } from "../../../hooks/usePosts";
 import { formatDistance } from "date-fns";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebase/firebase";
-import { collection, doc, getDoc, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  where
+} from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ProfilePost() {
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { posts } = usePosts();
+  const [userData, setUserData] = useState({});
+  const [userPosts, setUserPosts] = useState([]);
+  const navigate = useNavigate();
 
-  const { username } = useParams();
+  const { uid } = useParams();
+
+  function getProfile() {
+    if (uid) {
+      const docRef = doc(db, "users", uid);
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUserData(data);
+        } else {
+          console.log("No such document!");
+        }
+      });
+    }
+  }
+
+  async function getPost() {
+    const postQuery = query(
+      collection(db, "posts"),
+      where("authorId", "==", uid),
+      orderBy("createdAt", "desc")
+    );
+
+    const postQuerySnapshot = await getDocs(postQuery);
+    const post = [];
+
+    postQuerySnapshot.forEach((doc) => {
+      post.push({
+        ...doc.data(),
+        id: doc.id
+      });
+    });
+    setUserPosts(post);
+
+    console.log(post);
+  }
+
+  useEffect(() => {
+    getProfile();
+    getPost();
+    // console.log(userData);
+  }, []);
 
   return (
     <Flex
@@ -50,7 +103,7 @@ function ProfilePost() {
           Bio
         </Text>
         <Box mb={10}>
-          <Text>{userOtherInfo?.bio}</Text>
+          <Text>{userData?.bio}</Text>
         </Box>
       </Flex>
       <Flex
@@ -58,10 +111,10 @@ function ProfilePost() {
         w={{
           base: "100%",
           md: "100%",
-          lg: "60%"
+          lg: "70%"
         }}
       >
-        {username ? null : (
+        {!uid && (
           <CreatePost
             width={"100%"}
             height={{
@@ -71,7 +124,6 @@ function ProfilePost() {
             }}
           />
         )}
-
         {posts?.length === 0 ? (
           <>
             <Text
@@ -80,13 +132,44 @@ function ProfilePost() {
               letterSpacing={1}
               mb={5}
             >
-              Posts
+              No posts
             </Text>
           </>
-        ) : (
+        ) : !uid ? (
           posts?.map((post, index) => {
             return (
               post?.authorId === user?.uid && (
+                <>
+                  {/* <Text m={0}>{post?.authorId}</Text> */}
+
+                  <Post
+                    key={index}
+                    width={"100%"}
+                    postUser={post?.postUser}
+                    postUserImage={post?.postUserImage ?? null}
+                    post={post?.post}
+                    postImages={post?.postImages}
+                    postDateTime={
+                      formatDistance(
+                        new Date(post?.createdAt?.toDate()),
+                        new Date()
+                      ) + " ago"
+                    }
+                    postVisibility={post?.postVisibility}
+                    postAuthorId={post.authorId}
+                    postId={post?.postId}
+                    onPostClick={() => {
+                      navigate(`/post/${post?.postId}`);
+                    }}
+                  />
+                </>
+              )
+            );
+          })
+        ) : (
+          userPosts?.map((post, index) => {
+            return (
+              post?.authorId === uid && (
                 <Post
                   key={index}
                   width={"100%"}
@@ -101,6 +184,11 @@ function ProfilePost() {
                     ) + " ago"
                   }
                   postVisibility={post?.postVisibility}
+                  postAuthorId={post.authorId}
+                  postId={post?.postId}
+                  onPostClick={() => {
+                    navigate(`/post/${post?.postId}`);
+                  }}
                 />
               )
             );

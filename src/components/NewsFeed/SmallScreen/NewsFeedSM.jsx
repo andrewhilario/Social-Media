@@ -14,12 +14,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/firebase";
 import { Center, Spinner, Text } from "@chakra-ui/react";
 import { formatDistance } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 function NewsFeedSM() {
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { posts, isLoading } = usePosts();
-
+  const navigate = useNavigate();
   const [postUser, setPostUser] = React.useState("");
   const [postUserImage, setPostUserImage] = React.useState(null);
 
@@ -87,6 +88,11 @@ function NewsFeedSM() {
                 }
                 postVisibility={post?.postVisibility}
                 userUid={post?.authorId}
+                onPostClick={() => {
+                  navigate(`/post/${post?.postId}`);
+                }}
+                postAuthorId={post.authorId}
+                postId={post?.postId}
               />
             )
           );

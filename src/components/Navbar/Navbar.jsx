@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "../../assets/images/default-avatar.jpg";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 
-function Navbar({ websiteName, paddingVertical }) {
+function Navbar({ websiteName, paddingVertical, logoMargin }) {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
   const [profilePicture, setProfilePicture] = React.useState(null);
@@ -60,7 +60,7 @@ function Navbar({ websiteName, paddingVertical }) {
         alignItems={"center"}
       >
         <Flex w={"50%"} alignItems={"center"} gap={5}>
-          <LogoFC websiteName={websiteName} />
+          <LogoFC margin={logoMargin} websiteName={websiteName} />
           <LinkBox
             w={50}
             h={50}
@@ -130,13 +130,17 @@ function Navbar({ websiteName, paddingVertical }) {
                   align={"center"}
                 >
                   <CgProfile mr={4} fontSize={"1.5rem"} />
-                  <Text fontSize={"1.2rem"}>Profile</Text>
+                  <Text m={0} fontSize={"1.2rem"}>
+                    Profile
+                  </Text>
                 </Flex>
               </MenuItem>
               <MenuItem borderRadius={"10px"}>
                 <Flex onClick={handleLogout} align={"center"}>
                   <MdLogout mr={4} fontSize={"1.5rem"} />
-                  <Text fontSize={"1.2rem"}>Logout</Text>
+                  <Text m={0} fontSize={"1.2rem"}>
+                    Logout
+                  </Text>
                 </Flex>
               </MenuItem>
             </MenuList>

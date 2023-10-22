@@ -162,7 +162,7 @@ function CreatePost(props) {
           src={user?.photoURL}
         />
         <Box ml={3} w="100%">
-          <Text fontWeight="bold">
+          <Text m={0} fontWeight="bold">
             {user?.displayName ??
               userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
           </Text>
@@ -185,7 +185,9 @@ function CreatePost(props) {
               }
               rightIcon={<ChevronDownIcon />}
             >
-              <Text fontSize={14}>{isSelected ? isSelected : "Public"}</Text>
+              <Text m={0} fontSize={14} mb={0}>
+                {isSelected ? isSelected : "Public"}
+              </Text>
             </MenuButton>
             <MenuList>
               <MenuItem
@@ -194,7 +196,7 @@ function CreatePost(props) {
                 }}
               >
                 <MdOutlinePublic />
-                <Text ml={2} fontSize={14}>
+                <Text mb={0} ml={2} fontSize={14}>
                   Public
                 </Text>
               </MenuItem>
@@ -204,7 +206,7 @@ function CreatePost(props) {
                 }}
               >
                 <BiSolidLockAlt />
-                <Text ml={2} fontSize={14}>
+                <Text mb={0} ml={2} fontSize={14}>
                   Private
                 </Text>
               </MenuItem>
@@ -339,6 +341,7 @@ function CreatePost(props) {
                 />
                 {isSmallerThan425 ? null : (
                   <Text
+                    mb={0}
                     ml={2}
                     fontWeight={"bold"}
                     fontSize={{

@@ -6,10 +6,10 @@ function Chat() {
   return (
     <>
       <Flex justifyContent={"space-between"} align={"center"}>
-        <Text fontWeight={"bold"} fontSize={24}>
+        <Text m={0} fontWeight={"bold"} fontSize={24}>
           Chat
         </Text>
-        <Text fontSize={14} color={"blue.600"}>
+        <Text m={0} fontSize={14} color={"blue.600"}>
           Hide Chat
         </Text>
       </Flex>
@@ -29,7 +29,7 @@ function Chat() {
           <Avatar src={user.image}>
             <AvatarBadge size=".9em" bg="green.500" />
           </Avatar>
-          <Text ml={3} fontSize={16} fontWeight={"bold"}>
+          <Text m={0} ml={3} fontSize={16} fontWeight={"bold"}>
             {user.name}
           </Text>
         </Flex>

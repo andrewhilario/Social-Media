@@ -8,6 +8,7 @@ import Login from "../pages/Login/Login";
 import { useEffect, useState } from "react";
 import { AuthProvider } from "../context/AuthContext";
 import ViewProfile from "../pages/ViewProfile/ViewProfile";
+import ViewPost from "../pages/ViewPost/ViewPost";
 
 export default function Router() {
   // const [isAuth, setIsAuth] = useState(checkAuth());
@@ -18,7 +19,8 @@ export default function Router() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Homepage />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/:username" element={<ViewProfile />} />
+          <Route path="/profile/:uid" element={<ViewProfile />} />
+          <Route path="/post/:postId" element={<ViewPost />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/admin" element={<Admin active={0} />} />
           <Route path="/admin/users" element={<Admin active={1} />} />

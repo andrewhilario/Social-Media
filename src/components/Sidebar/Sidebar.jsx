@@ -28,7 +28,11 @@ function Sidebar() {
         <SidebarItem
           to="/profile"
           icon={<Avatar src={user?.photoURL} border={"2px solid #0C71F5"} />}
-          text={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+          text={
+            <Text m={0} fontWeight={"semibold"}>
+              {userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+            </Text>
+          }
         />
         <SidebarItem
           icon={<HiUsers color="#0C71F5" fontSize={32} />}

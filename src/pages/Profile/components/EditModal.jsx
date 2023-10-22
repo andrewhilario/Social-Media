@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import {
   Modal,
@@ -71,9 +72,8 @@ function EditModal(props) {
         );
         uploadBytes(imageRef, image).then((snapshot) => {
           getDownloadURL(snapshot.ref).then((url) => {
-            updateProfile(user, {
-              photoURL: url
-            });
+            const docRef = doc(db, "users", user.uid);
+            setDoc(docRef, { profileImage: url }, { merge: true });
             toast({
               title: "Profile photo updated.",
               status: "success",

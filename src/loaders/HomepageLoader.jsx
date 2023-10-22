@@ -15,7 +15,7 @@ import LoginModal from "../components/LoginModal/LoginModal";
 const HomepageLoader = () => {
   return (
     <>
-      <Layout webName="Paysbook" bgColor="#EDEDED" paddingY={5}>
+      <Layout webName="UM Connect" bgColor="#EDEDED" paddingY={5}>
         <LoginModal isOpen={true} onClose={() => {}} />
         <Grid templateColumns={"repeat(4, 1fr)"} gap={6}>
           <GridItem p={5}>

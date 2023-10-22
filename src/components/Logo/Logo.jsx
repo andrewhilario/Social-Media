@@ -1,10 +1,19 @@
 /* eslint-disable react/prop-types */
-import { Box, Container, Flex, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Flex,
+  Image,
+  Text,
+  useMediaQuery
+} from "@chakra-ui/react";
 import React from "react";
 import Logo from "../../assets/svg/Logo.svg";
 import { Link } from "react-router-dom";
 
 function LogoFC(props) {
+  const mediaQuery = useMediaQuery("(max-width: 300px");
+
   return (
     <>
       <Link to="/">
@@ -18,12 +27,12 @@ function LogoFC(props) {
             base: 0,
             md: "24px"
           }}
-          margin={props.margin ?? "0"}
+          margin={props.margin ? props.margin : "0"}
           flexDirection={"column"}
         >
           <Text
             fontSize={{
-              base: "5xl",
+              base: mediaQuery ? "1rem" : "1.5rem",
               lg: props.mainTextFontSize ?? "4xl"
             }}
             fontWeight={{
@@ -31,6 +40,7 @@ function LogoFC(props) {
               lg: props.mainTextFontWeight ?? "bold"
             }}
             color={props.color ?? "white"}
+            m={0}
           >
             {props.websiteName}
           </Text>
@@ -42,8 +52,9 @@ function LogoFC(props) {
               lg: props.subTextFontSize ?? "2xl"
             }}
             fontWeight={"medium"}
+            display={props.subTitleWebsiteName ? "block" : "none"}
           >
-            {props.subTitleWebsiteName ?? ""}
+            {props.subTitleWebsiteName ?? null}
           </Text>
         </Flex>
       </Link>

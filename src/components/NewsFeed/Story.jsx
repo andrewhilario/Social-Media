@@ -10,6 +10,7 @@ import Person4 from "../../assets/images/person-4.jpg";
 import Person4Place from "../../assets/images/person-4-place.jpg";
 import Person5 from "../../assets/images/person-5.jpg";
 import Person5Place from "../../assets/images/person-5-place.jpg";
+import { useAuth } from "../../context/AuthContext";
 
 const Person_2 = {
   name: "Joanna Doe",
@@ -34,6 +35,8 @@ const Person_5 = {
 };
 
 function Story() {
+  const { user } = useAuth();
+
   return (
     <>
       <Grid
@@ -44,7 +47,7 @@ function Story() {
         py={4}
       >
         <GridItem w={"100%"}>
-          <StoryItem image={Person1} name={"Your Story"} />
+          <StoryItem image={user.photoURL} name={"Your Story"} />
         </GridItem>
         <GridItem w={"100%"}>
           <StoryItem

@@ -5,7 +5,10 @@ import {
   doc,
   Timestamp,
   query,
-  orderBy
+  orderBy,
+  where,
+  getDoc,
+  onSnapshot
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { v4 as uuid } from "uuid";
@@ -82,15 +85,27 @@ export function usePosts() {
   return { posts, isLoading };
 }
 
-export function usePost(postId) {
-  const postQuery = doc(db, "posts", postId);
+// export function usePost(postId) {
+//   const postRef = doc(db, "posts", postId);
 
-  const [post, isLoading] = useDocumentData(postQuery);
+//   onSnapshot(postRef, (doc) => {
+//     if (doc.exists()) {
+//       doc.data();
+//     } else {
+//       return null;
+//     }
+//   });
 
-  if (!post)
-    return {
-      post: null,
-      isLoading: true
-    };
-  return { post, isLoading };
-}
+//   return { postData };
+// }
+
+export const usePost = (postId) => {
+  const postRef = doc(db, "posts", postId);
+  const [postData, isLoading, error] = useDocumentData(postRef);
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return { postData, isLoading };
+};

@@ -25,7 +25,9 @@ function Post({
   postImages,
   postDateTime,
   postVisibility,
-  userUid,
+  postAuthorId,
+  onPostClick,
+  postId,
   postLikes,
   postComments,
   postShares
@@ -38,6 +40,10 @@ function Post({
 
   imagePost.push(postImageArray);
 
+  const image = imagePost[0];
+
+  const parse = JSON.parse(image);
+
   return (
     <>
       <Card w={width ?? "90%"} m={"10px auto"} p={3}>
@@ -46,9 +52,10 @@ function Post({
           profileSrc={postUserImage}
           dateTime={postDateTime}
           postVisibility={postVisibility}
-          uid={userUid}
+          postAuthorUid={postAuthorId}
+          onPostClick={onPostClick}
         />
-        <Text mt={3} px={2} fontSize={14}>
+        <Text mb={0} mt={3} px={2} fontSize={14}>
           {post}
         </Text>
         <Grid
@@ -56,62 +63,94 @@ function Post({
           gap={2}
           mt={postImageArray.length === 0 ? "0" : "1rem"}
           borderRadius={"10px"}
+          w={"100%"}
+          // h={parse.length === 1 ? "82vh" : "auto"}
         >
-          {imagePost[0].length !== 0 && imagePost[0].length === 3 ? (
-            <>
-              <GridItem colSpan={2} borderRadius={"inherit"}>
-                {imagePost[0][0] && (
-                  <Image
-                    borderRadius={"inherit"}
-                    src={imagePost[0][0].replace(/[['"]+/g, "")}
-                    objectFit={"cover"}
-                  />
-                )}
-              </GridItem>
-              <GridItem colSpan={1} borderRadius={"inherit"}>
-                {imagePost[0][1] && (
-                  <Image
-                    src={imagePost[0][1].replace(/[['"]+/g, "")}
-                    objectFit={"cover"}
-                    borderRadius={"inherit"}
-                  />
-                )}
-              </GridItem>
-              <GridItem colSpan={1} borderRadius={"inherit"}>
-                {imagePost[0][2] && (
-                  <Image
-                    borderRadius={"inherit"}
-                    src={imagePost[0][2].replace(/[['"]+/g, "")}
-                    objectFit={"cover"}
-                  />
-                )}
-              </GridItem>
-            </>
-          ) : (
-            postImageArray.map((image, index) => {
-              return (
-                <GridItem
-                  borderRadius={"inherit"}
-                  key={index}
-                  colSpan={"repeat(2, 1fr)"}
-                >
-                  <Image
-                    borderRadius={"inherit"}
-                    w={postImageArray.length === 1 && "100%"}
-                    h={postImageArray.length === 1 && "100%"}
-                    src={image.replace(/[['"]+/g, "")}
-                    objectFit={"cover"}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.style.display = "none";
+          {parse.map((image, index) => {
+            const imageSlide = image.replace(/[['"]+/g, "");
+            if (parse.length === 3) {
+              switch (index) {
+                case 0:
+                  return (
+                    <GridItem key={index} colSpan={2} borderRadius={"10px"}>
+                      <Image
+                        className="d-block w-100 h-100 object-fit-contain"
+                        src={imageSlide}
+                        alt="slide 1"
+                        borderRadius={"10px"}
+                      />
+                    </GridItem>
+                  );
+                case 1:
+                  return (
+                    <GridItem key={index} colSpan={1} borderRadius={"10px"}>
+                      <Image
+                        className="d-block w-100 h-100 object-fit-contain"
+                        src={imageSlide}
+                        alt="slide 1"
+                        borderRadius={"10px"}
+                      />
+                    </GridItem>
+                  );
+                case 2:
+                  return (
+                    <GridItem key={index} colSpan={1} borderRadius={"10px"}>
+                      <Image
+                        className="d-block w-100 h-100 object-fit-contain"
+                        src={imageSlide}
+                        alt="slide 1"
+                        borderRadius={"10px"}
+                      />
+                    </GridItem>
+                  );
+              }
+            } else {
+              if (parse.length === 1) {
+                return (
+                  <GridItem
+                    key={index}
+                    colSpan={2}
+                    rowSpan={1}
+                    style={{
+                      width: "100%",
+                      height: "500px",
+                      background: "#969696"
                     }}
-                  />
-                </GridItem>
-              );
-            })
-          )}
+                    borderRadius={"10px"}
+                  >
+                    <Image
+                      className="d-block w-100 h-100 object-fit-contain"
+                      src={imageSlide}
+                      alt="slide 1"
+                      borderRadius={"10px"}
+                    />
+                  </GridItem>
+                );
+              } else {
+                return (
+                  <GridItem
+                    key={index}
+                    colSpan={1}
+                    rowSpan={1}
+                    style={{
+                      width: "100%",
+                      background: "#969696"
+                    }}
+                    borderRadius={"10px"}
+                  >
+                    <Image
+                      className="d-block w-100 h-100 object-fit-contain"
+                      src={imageSlide}
+                      alt="slide 1"
+                      borderRadius={"10px"}
+                    />
+                  </GridItem>
+                );
+              }
+            }
+          })}
         </Grid>
-        <PostFooter />
+        <PostFooter postId={postId} />
       </Card>
     </>
   );

@@ -6,10 +6,10 @@ function Advertisement() {
   return (
     <>
       <Flex justifyContent={"space-between"} align={"center"}>
-        <Text fontWeight={"bold"} fontSize={24}>
+        <Text m={0} fontWeight={"bold"} fontSize={24}>
           Advertisement
         </Text>
-        <Text fontSize={14} color={"blue.600"}>
+        <Text m={0} fontSize={14} color={"blue.600"}>
           Close
         </Text>
       </Flex>

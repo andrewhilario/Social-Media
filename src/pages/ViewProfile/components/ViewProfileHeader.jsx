@@ -27,25 +27,44 @@ import ProfileLoader from "../../../loaders/ProfileLoader";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiUserPlus } from "react-icons/bi";
 import UpdateProfileModal from "../../Profile/components/UpdateProfileModal";
+import { usePosts } from "../../../hooks/usePosts";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebase";
 
 function ViewProfileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { userOtherInfo, isLoading } = useGetUserOtherInfo();
   const { user } = useAuth();
+  const { posts } = usePosts();
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState(null);
-  const [userCover, setUserCover] = useState(null);
-
+  // const [userProfile, setUserProfile] = useState(null);
+  // const [userCover, setUserCover] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [friendAdded, setFriendAdded] = useState(false);
   // Params
-  const { username } = useParams();
+  const { uid } = useParams();
+
+  if (user?.uid === uid) {
+    navigate("/profile");
+  }
 
   function getProfile() {
-    const userUid = window.localStorage.getItem("userUid");
-    console.log(userUid);
+    if (uid) {
+      const docRef = doc(db, "users", uid);
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUserData(data);
+        } else {
+          console.log("No such document!");
+        }
+      });
+    }
   }
 
   useEffect(() => {
     getProfile();
+    // console.log(userData);
   }, []);
 
   return (
@@ -57,7 +76,7 @@ function ViewProfileHeader() {
           <Box w={"100%"} backgroundColor={"white"}>
             <UpdateProfileModal isOpen={isOpen} onClose={onClose} />
             <Box
-              backgroundImage={`url(${userOtherInfo?.coverPhoto})`}
+              backgroundImage={`url(${userData?.coverPhoto})`}
               backgroundColor={"gray.200"}
               backgroundSize={"cover"}
               backgroundPosition={"center"}
@@ -113,10 +132,8 @@ function ViewProfileHeader() {
                   border={"5px solid #EDEDED"}
                 >
                   <Avatar
-                    name={
-                      userOtherInfo?.firstName + " " + userOtherInfo?.lastName
-                    }
-                    src={user?.photoURL}
+                    name={userData?.firstName + " " + userData?.lastName}
+                    src={userData?.profileImage}
                     w={"150px"}
                     h={"150px"}
                   />
@@ -140,7 +157,7 @@ function ViewProfileHeader() {
                   direction={"column"}
                 >
                   <Text fontSize={"2xl"} fontWeight={"bold"}>
-                    {userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
+                    {userData?.firstName + " " + userData?.lastName}
                   </Text>
                   {/* <Text fontSize={"md"} fontWeight={"medium"}>
                     {props.friends} Friends
@@ -155,6 +172,7 @@ function ViewProfileHeader() {
                   _hover={{
                     bg: "#0C71F5"
                   }}
+                  // onClick={handleAddFriend}
                 >
                   <BiUserPlus
                     fontSize={"1.5rem"}
