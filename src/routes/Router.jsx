@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { AuthProvider } from "../context/AuthContext";
 import ViewProfile from "../pages/ViewProfile/ViewProfile";
 import ViewPost from "../pages/ViewPost/ViewPost";
+import Notification from "../pages/FriendRequests/FriendRequests";
+import FriendRequests from "../pages/FriendRequests/FriendRequests";
 
 export default function Router() {
   // const [isAuth, setIsAuth] = useState(checkAuth());
@@ -21,6 +23,7 @@ export default function Router() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:uid" element={<ViewProfile />} />
           <Route path="/post/:postId" element={<ViewPost />} />
+          <Route path="/friend-requests" element={<FriendRequests />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/admin" element={<Admin active={0} />} />
           <Route path="/admin/users" element={<Admin active={1} />} />

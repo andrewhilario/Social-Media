@@ -28,7 +28,7 @@ import useComment from "../../hooks/useComment";
 import { useForm } from "react-hook-form";
 import { getComment } from "../../hooks/getComments";
 
-function PostFooter({ postId }) {
+function PostFooter({ postId, postAuthorId }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
@@ -181,38 +181,52 @@ function PostFooter({ postId }) {
       {/* The code below will be added next week */}
       {comments &&
         comments.map((comment, index) => {
-          return (
-            <Flex mt={4} align={"center"} key={index}>
-              <Avatar
-                name={comment?.commentAuthorName ?? ""}
-                src={comment?.commentAuthorImage ?? null}
-                size={"sm"}
-              />
-              <Box ml={2} borderRadius={"20px"} bg={"#f1f1f1"} px={4} py={2}>
-                <Link href={`/profile/${comment?.commentAuthorId ?? ""}`}>
-                  <Text mb={0} fontSize={14} fontWeight={"bold"}>
-                    {comment?.commentAuthorName ?? ""}
+          if (index === 1) {
+            return (
+              <>
+                <Flex mt={4} align={"center"} key={index}>
+                  <Avatar
+                    name={comment?.commentAuthorName ?? ""}
+                    src={comment?.commentAuthorImage ?? null}
+                    size={"sm"}
+                  />
+                  <Box
+                    ml={2}
+                    borderRadius={"20px"}
+                    bg={"#f1f1f1"}
+                    px={4}
+                    py={2}
+                  >
+                    <Link href={`/profile/${comment?.commentAuthorId ?? ""}`}>
+                      <Text mb={0} fontSize={14} fontWeight={"bold"}>
+                        {comment?.commentAuthorName ?? ""}
+                      </Text>
+                    </Link>
+                    <Text mb={0} fontSize={14}>
+                      {comment.comment ?? ""}
+                    </Text>
+                  </Box>
+                </Flex>
+                <Link
+                  color={"#0077ff"}
+                  href={`/post/${postId}`}
+                  ml={1}
+                  key={index}
+                >
+                  <Text
+                    mt={4}
+                    mb={0}
+                    fontSize={14}
+                    fontWeight={"bold"}
+                    cursor={"pointer"}
+                  >
+                    View more comments
                   </Text>
                 </Link>
-                <Text mb={0} fontSize={14}>
-                  {comment.comment ?? ""}
-                </Text>
-              </Box>
-            </Flex>
-          );
+              </>
+            );
+          }
         })}
-
-      {/* <Link color={"#0077ff"} href={`/`} ml={1}>
-        <Text
-          mt={4}
-          mb={0}
-          fontSize={14}
-          fontWeight={"bold"}
-          cursor={"pointer"}
-        >
-          View more comments
-        </Text>
-      </Link> */}
     </>
   );
 }

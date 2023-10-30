@@ -11,7 +11,8 @@ import {
   MenuItem,
   Text,
   transition,
-  Icon
+  Icon,
+  Link
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import LogoFC from "../Logo/Logo";
@@ -62,11 +63,13 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
         <Flex w={"50%"} alignItems={"center"} gap={5}>
           <LogoFC margin={logoMargin} websiteName={websiteName} />
           <LinkBox
+            href={"/notifications"}
             w={50}
             h={50}
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
+            borderRadius={"100%"}
             _hover={{
               borderRadius: "100%",
               bg: "#0149a8",
@@ -74,7 +77,9 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
               cursor: "pointer"
             }}
           >
-            <Image w={30} h={30} src={Notification} alt="notification" />
+            <Link href={"/"}>
+              <Image w={30} h={30} src={Notification} alt="notification" />
+            </Link>
           </LinkBox>
           <LinkBox
             w={50}
@@ -82,6 +87,7 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
+            borderRadius={"100%"}
             _hover={{
               borderRadius: "100%",
               bg: "#0149a8",
@@ -97,6 +103,7 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
+            borderRadius={"100%"}
             _hover={{
               borderRadius: "100%",
               bg: "#0149a8",
@@ -118,7 +125,7 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
             <MenuButton>
               <Avatar
                 name={userOtherInfo?.firstName + " " + userOtherInfo?.lastName}
-                src={profilePicture}
+                src={user?.photoURL}
               />
             </MenuButton>
             <MenuList py={"1.2rem"} px={".5rem"}>

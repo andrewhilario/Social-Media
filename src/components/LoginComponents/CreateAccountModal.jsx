@@ -275,7 +275,7 @@ export default function CreateAccountModal({ isOpenModal, onCloseModal }) {
                   colorScheme="whatsapp"
                   type="submit"
                 >
-                  <Text fontSize={"1rem"} fontWeight={"bold"}>
+                  <Text m={0} fontSize={"1rem"} fontWeight={"bold"}>
                     Sign Up
                   </Text>
                 </Button>

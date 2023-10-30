@@ -9,6 +9,7 @@ import SmallerScreen from "../SmallScreen/SmallerScreen";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import HomepageLoader from "../../loaders/HomepageLoader";
+import ChatBubble from "../../components/ChatBubble/ChatBubble";
 
 function Homepage() {
   const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
@@ -53,10 +54,30 @@ function Homepage() {
               <GridItem p={5}>
                 <Sidebar />
               </GridItem>
-              <GridItem colSpan={2} w="100%">
+              <GridItem
+                colSpan={2}
+                w="100%"
+                css={{
+                  overflowY: "scroll",
+                  height: "100vh",
+                  "&::-webkit-scrollbar": {
+                    width: "0.4em"
+                  }
+                }}
+              >
                 <NewsFeed />
               </GridItem>
-              <GridItem p={5} w="100%">
+              <GridItem
+                p={5}
+                w="100%"
+                css={{
+                  overflowY: "scroll",
+                  height: "100vh",
+                  "&::-webkit-scrollbar": {
+                    width: "0.4em"
+                  }
+                }}
+              >
                 <SidebarRight />
               </GridItem>
             </Grid>

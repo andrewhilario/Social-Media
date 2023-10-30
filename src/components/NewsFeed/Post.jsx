@@ -150,7 +150,7 @@ function Post({
             }
           })}
         </Grid>
-        <PostFooter postId={postId} />
+        <PostFooter postId={postId} postAuthorId={postAuthorId} />
       </Card>
     </>
   );

@@ -35,6 +35,7 @@ function Sidebar() {
           }
         />
         <SidebarItem
+          to="/friend-requests"
           icon={<HiUsers color="#0C71F5" fontSize={32} />}
           text={"Friends"}
         />

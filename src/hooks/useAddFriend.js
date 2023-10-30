@@ -1,59 +1,153 @@
 import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc
+} from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "../firebase";
+import { useAuth } from "../context/AuthContext";
+import { db } from "../firebase/firebase";
+import useGetUserOtherInfo from "./useGetUserOtherInfo";
 
 const useAddFriend = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const { user } = useAuth();
+  const { userOtherInfo } = useGetUserOtherInfo();
 
-  const addFriend = async (friendEmail) => {
-    setIsLoading(true);
-    setError(null);
-    setSuccess(false);
+  const addFriend = async (userUid, userPhotoURL, userFullName) => {
+    const friendRef = doc(db, "friend-request", userUid);
+    await setDoc(
+      friendRef,
+      {
+        request: arrayUnion({
+          status: "pending",
+          from: user.uid,
+          requesterPhotoURL: userPhotoURL,
+          requesterFullName: userFullName,
+          to: userUid,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+      },
+      { merge: true }
+    );
+    console.log("friend request sent");
+  };
 
-    try {
-      // Get the authenticated user's ID
-      const auth = getAuth();
-      const userId = auth.currentUser.uid;
+  const listFriendRequest = async (userId) => {
+    const friendRef = doc(db, "friend-request", userId);
+    const friendSnapshot = await getDoc(friendRef);
+    const friendData = friendSnapshot.data();
+    const friendRequest = friendData.request;
+    const friendRequestData = friendRequest.map((request) => ({
+      ...request,
+      id: request.to
+    }));
 
-      // Check if the friend email exists in the users collection
-      const usersRef = collection(db, "users");
-      const querySnapshot = await usersRef
-        .where("email", "==", friendEmail)
-        .get();
+    return friendRequestData;
+  };
 
-      if (querySnapshot.empty) {
-        throw new Error("User not found");
-      }
+  const confirmRequest = async (userUid) => {
+    const friendRef = doc(db, "friend-request", userUid);
 
-      // Get the friend's ID
-      const friendId = querySnapshot.docs[0].id;
+    // Update the friend request status
+    const getFriendRequest = await getDoc(friendRef);
+    const friendRequestData = getFriendRequest.data();
+    const friendRequest = friendRequestData.request;
+    const friendRequestIndex = friendRequest.findIndex((request) => {
+      return request.from === user.uid;
+    });
 
-      // Add the friend to the user's friends collection
-      const friendsRef = collection(db, "users", userId, "friends");
-      await addDoc(friendsRef, { friendId });
+    friendRequest[friendRequestIndex + 1].status = "confirmed";
+    friendRequest[friendRequestIndex + 1].updatedAt = new Date();
 
-      // Send a friend request to the added user
-      const friendRequestsRef = collection(
-        db,
-        "users",
-        friendId,
-        "friendRequests"
-      );
-      await setDoc(doc(friendRequestsRef, userId), { status: "pending" });
+    await setDoc(
+      friendRef,
+      {
+        request: friendRequest
+      },
+      { merge: true }
+    );
 
-      setSuccess(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+    const fullName = friendRequest[friendRequestIndex + 1].requesterFullName;
+    const profileImage =
+      friendRequest[friendRequestIndex + 1].requesterPhotoURL;
+    const friendIdto = friendRequest[friendRequestIndex + 1].to;
+    const friendIdFrom = friendRequest[friendRequestIndex + 1].from;
+
+    const friendFullname =
+      userOtherInfo.firstName + " " + userOtherInfo.lastName;
+    const friendProfileImage = user.photoURL;
+    // Update the user's friends list
+    const ownFriends = doc(db, "friends", user.uid);
+    await setDoc(
+      ownFriends,
+      {
+        friends: arrayUnion({
+          friendId: friendIdFrom,
+          friendFullname: fullName,
+          friendProfileImage: profileImage,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+      },
+      { merge: true }
+    );
+
+    const friendFriends = doc(db, "friends", friendIdFrom);
+    await setDoc(
+      friendFriends,
+      {
+        friends: arrayUnion({
+          friendId: friendIdto,
+          friendFullname: friendFullname,
+          friendProfileImage: friendProfileImage,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        })
+      },
+      { merge: true }
+    );
+
+    console.log("Friend request confirmed");
+    // console.log(friendRequestStatus);
+  };
+
+  const rejectRequest = async (userUid) => {
+    const friendRef = doc(db, "friend-request", userUid);
+
+    // Update the friend request status
+    const getFriendRequest = await getDoc(friendRef);
+    const friendRequestData = getFriendRequest.data();
+    const friendRequest = friendRequestData.request;
+    const friendRequestIndex = friendRequest.findIndex((request) => {
+      return request.from === user.uid;
+    });
+
+    friendRequest[friendRequestIndex + 1].status = "rejected";
+    friendRequest[friendRequestIndex + 1].updatedAt = new Date();
+
+    if (friendRequest[friendRequestIndex + 1].status === "rejected") {
+      friendRequest.splice(friendRequestIndex, 1);
     }
   };
 
-  return { addFriend, isLoading, error, success };
+  const removeFriend = async (userUid) => {
+    const friendRef = doc(db, "friend-request", userUid);
+    await deleteDoc(friendRef);
+  };
+
+  return {
+    addFriend,
+    listFriendRequest,
+    confirmRequest,
+    rejectRequest,
+    removeFriend
+  };
 };
 
 export default useAddFriend;

@@ -12,7 +12,9 @@ import {
   Text,
   Link as ChakraLink,
   useMediaQuery,
-  useToast
+  useToast,
+  Center,
+  CircularProgress
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout";
@@ -27,7 +29,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
-import { formatDistance, formatDistanceToNow } from "date-fns";
+import { formatDistance, formatDistanceToNow, set } from "date-fns";
 import { CloseIcon } from "@chakra-ui/icons";
 
 import useLike from "../../hooks/useLike";
@@ -52,6 +54,7 @@ function ViewPost() {
   const { register, handleSubmit, formState: error, reset } = useForm();
   const navigate = useNavigate();
   const mediaQuery = useMediaQuery("(max-width: 425px)");
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
   const { addComment } = useComment();
@@ -60,25 +63,33 @@ function ViewPost() {
   const getPostImage = () => {
     const postRef = doc(db, "posts", postId);
     onSnapshot(postRef, (doc) => {
-      const images = JSON.parse(doc.data()?.postImages);
-      const postImageArray = images.split(",");
-      const imagePost = [];
+      setIsLoading(true);
+      try {
+        const images = JSON.parse(doc.data()?.postImages);
+        const postImageArray = images.split(",");
+        const imagePost = [];
 
-      imagePost.push(postImageArray);
+        imagePost.push(postImageArray);
 
-      const image = imagePost[0];
+        const image = imagePost[0];
 
-      const parse = JSON.parse(image);
-      setPostImageArray(parse); // Set the post images in the state
-      setPostUser(doc.data()?.postUser); // Set the post user in the state
-      setPostUserImage(doc.data()?.postUserImage); // Set the post user image in the state
-      setPostDateTime(
-        formatDistance(new Date(doc.data()?.createdAt?.toDate()), new Date()) +
-          " ago"
-      ); // Set the post date time in the state
-      setPost(doc.data()?.post); // Set the post in the state
-      setPostVisibility(doc.data()?.postVisibility); // Set the post visibility in the state
-      setAuthorId(doc.data()?.authorId); // Set the author id in the state
+        const parse = JSON.parse(image);
+        setPostImageArray(parse); // Set the post images in the state
+        setPostUser(doc.data()?.postUser); // Set the post user in the state
+        setPostUserImage(doc.data()?.postUserImage); // Set the post user image in the state
+        setPostDateTime(
+          formatDistance(
+            new Date(doc.data()?.createdAt?.toDate()),
+            new Date()
+          ) + " ago"
+        ); // Set the post date time in the state
+        setPost(doc.data()?.post); // Set the post in the state
+        setPostVisibility(doc.data()?.postVisibility); // Set the post visibility in the state
+        setAuthorId(doc.data()?.authorId); // Set the author id in the state
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     });
   };
 
@@ -128,7 +139,11 @@ function ViewPost() {
 
   return (
     <Layout navMargin={0}>
-      {postImage.length >= 1 ? (
+      {isLoading ? (
+        <Center minH={"100vh"}>
+          <CircularProgress isIndeterminate color={"#0C71F5"} />
+        </Center>
+      ) : postImage.length >= 1 ? (
         <Flex
           w={"100%"}
           direction={{
@@ -221,14 +236,14 @@ function ViewPost() {
               })}
 
               {/* <CCarouselItem>
-                    <CImage className="d-block w-100" src={TestImage} alt="slide 1" />
-                  </CCarouselItem>
-                  <CCarouselItem>
-                    <CImage className="d-block w-100" src={TestImage} alt="slide 2" />
-                  </CCarouselItem>
-                  <CCarouselItem>
-                    <CImage className="d-block w-100" src={TestImage} alt="slide 3" />
-                  </CCarouselItem> */}
+                            <CImage className="d-block w-100" src={TestImage} alt="slide 1" />
+                          </CCarouselItem>
+                          <CCarouselItem>
+                            <CImage className="d-block w-100" src={TestImage} alt="slide 2" />
+                          </CCarouselItem>
+                          <CCarouselItem>
+                            <CImage className="d-block w-100" src={TestImage} alt="slide 3" />
+                          </CCarouselItem> */}
             </CCarousel>
           </Box>
           <Box
@@ -258,8 +273,8 @@ function ViewPost() {
                   </Text>
                 </Link>
                 {/* <Text margin={0} fontWeight={"bold"} fontSize={"1.2rem"}>
-                {postUser}
-              </Text> */}
+                        {postUser}
+                      </Text> */}
                 <HStack spacing={2}>
                   <Text margin={0}>{postDateTime + " ago"}</Text>
                   {postVisibility === "Public" ? (
@@ -433,8 +448,8 @@ function ViewPost() {
                   </Text>
                 </Link>
                 {/* <Text margin={0} fontWeight={"bold"} fontSize={"1.2rem"}>
-                {postUser}
-              </Text> */}
+                        {postUser}
+                      </Text> */}
                 <HStack spacing={2}>
                   <Text margin={0}>{postDateTime + " ago"}</Text>
                   {postVisibility === "Public" ? (

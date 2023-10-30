@@ -30,6 +30,8 @@ import UpdateProfileModal from "../../Profile/components/UpdateProfileModal";
 import { usePosts } from "../../../hooks/usePosts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
+import { RiUserSharedLine } from "react-icons/ri";
+import useAddFriend from "../../../hooks/useAddFriend";
 
 function ViewProfileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,10 +39,11 @@ function ViewProfileHeader() {
   const { user } = useAuth();
   const { posts } = usePosts();
   const navigate = useNavigate();
-  // const [userProfile, setUserProfile] = useState(null);
-  // const [userCover, setUserCover] = useState(null);
+
   const [userData, setUserData] = useState({});
+  //friend
   const [friendAdded, setFriendAdded] = useState(false);
+  const { addFriend } = useAddFriend();
   // Params
   const { uid } = useParams();
 
@@ -61,6 +64,13 @@ function ViewProfileHeader() {
       });
     }
   }
+
+  const handleAddFriend = () => {
+    const fullName = userOtherInfo?.firstName + " " + userOtherInfo?.lastName;
+    const photoURL = user.photoURL;
+    setFriendAdded(!friendAdded);
+    addFriend(uid, photoURL, fullName);
+  };
 
   useEffect(() => {
     getProfile();
@@ -159,7 +169,9 @@ function ViewProfileHeader() {
                   <Text fontSize={"2xl"} fontWeight={"bold"}>
                     {userData?.firstName + " " + userData?.lastName}
                   </Text>
-                  {/* <Text fontSize={"md"} fontWeight={"medium"}>
+                  {/* 
+                    this will be added later
+                  <Text fontSize={"md"} fontWeight={"medium"}>
                     {props.friends} Friends
                   </Text> */}
                 </Flex>
@@ -172,15 +184,29 @@ function ViewProfileHeader() {
                   _hover={{
                     bg: "#0C71F5"
                   }}
-                  // onClick={handleAddFriend}
+                  onClick={handleAddFriend}
                 >
-                  <BiUserPlus
-                    fontSize={"1.5rem"}
-                    style={{
-                      marginRight: "5px"
-                    }}
-                  />
-                  Add Friend
+                  {friendAdded ? (
+                    <>
+                      <RiUserSharedLine
+                        fontSize={"1.5rem"}
+                        style={{
+                          marginRight: "5px"
+                        }}
+                      />
+                      Friend Request Sent
+                    </>
+                  ) : (
+                    <>
+                      <BiUserPlus
+                        fontSize={"1.5rem"}
+                        style={{
+                          marginRight: "5px"
+                        }}
+                      />
+                      Add Friend
+                    </>
+                  )}
                 </Button>
                 <Button
                   bg="#0C71F5"

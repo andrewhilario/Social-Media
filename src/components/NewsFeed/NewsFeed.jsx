@@ -7,11 +7,12 @@ import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../hooks/usePosts";
 import { formatDistance } from "date-fns";
-import { Center, Spinner, Text } from "@chakra-ui/react";
+import { Box, Center, Spinner, Text } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import ChatBubble from "../ChatBubble/ChatBubble";
 
 function NewsFeed() {
   const { user } = useAuth();
@@ -45,9 +46,10 @@ function NewsFeed() {
   });
 
   return (
-    <>
+    <Box>
       <Story />
       <CreatePost name="Mary Jane Doe" />
+
       {posts?.length === 0 ? (
         <>
           <Text
@@ -96,7 +98,7 @@ function NewsFeed() {
           );
         })
       )}
-    </>
+    </Box>
   );
 }
 
