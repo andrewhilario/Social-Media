@@ -259,7 +259,7 @@ const Messages = () => {
           <TabPanel>
             <Flex
               h={{
-                base: "84vh",
+                base: "81vh",
                 xl: "82vh"
               }}
               direction={"column"}
