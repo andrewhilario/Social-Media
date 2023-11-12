@@ -24,6 +24,7 @@ import mobileWatchIcon from "../../assets/svg/mobile-watch-icon.svg";
 import mobileWatchIconFilled from "../../assets/svg/mobile-watch-icon-filled.svg";
 import { NewsFeedSM } from "../../components/NewsFeed";
 import FriendRequests from "../FriendRequests/FriendRequests";
+import FriendList from "./components/FriendList";
 
 function SmallerScreen() {
   const [isSelected, setIsSelected] = React.useState(0);
@@ -83,6 +84,12 @@ function SmallerScreen() {
                 Friend Requests
               </Text>
               <FriendRequests />
+            </TabPanel>
+            <TabPanel>
+              <Text m={0} fontSize={20} fontWeight={"bold"}>
+                Messages
+              </Text>
+              <FriendList />
             </TabPanel>
           </TabPanels>
         </Tabs>

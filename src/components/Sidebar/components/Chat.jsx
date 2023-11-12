@@ -22,12 +22,14 @@ import { doc, getDoc } from "firebase/firestore";
 import ChatBubble from "../../ChatBubble/ChatBubble";
 import useChat from "../../../hooks/useChat";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
+import { useNavigate } from "react-router-dom";
 
 function Chat() {
   const { listAllFriends } = useFriends();
   const { user: authUser } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { addChat } = useChat();
+  const navigate = useNavigate();
 
   const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +40,17 @@ function Chat() {
     setFriends(list);
   };
 
+  const getChatId = async (friendId) => {
+    const chatId = userOtherInfo.chats;
+    console.log("chatId", authUser.uid);
+    chatId.map((chat) => {
+      if (chat.participants.id === friendId) {
+        console.log("chatId", chat.id);
+        navigate(`/chat/${chat.id}`);
+      }
+    });
+  };
+
   useEffect(() => {
     if (friends) {
       setIsLoading(false);
@@ -45,17 +58,19 @@ function Chat() {
     }
   }, []);
 
+  // console.log("AuthUser", authUser.uid);
+
   return (
     <>
       <Flex justifyContent={"space-between"} align={"center"}>
-        <Text m={0} fontWeight={"bold"} fontSize={24}>
+        <Text m={0} fontWeight={"bold"} fontSize={24} mb={4}>
           Chat
         </Text>
         {/* <Text m={0} fontSize={14} color={"blue.600"}>
           Hide Chat
         </Text> */}
       </Flex>
-      <ChatBubble onClose={onClose} setOnClose={setOnClose} />
+      {/* <ChatBubble onClose={onClose} setOnClose={setOnClose} /> */}
       {!friends ? (
         <>
           <Center mt={4}>
@@ -73,11 +88,10 @@ function Chat() {
           if (user.friendId === authUser.uid) {
             return (
               <Flex
-                mt={4}
                 align={"center"}
                 justify={"space-between"}
                 px={3}
-                py={4}
+                py={2}
                 _hover={{
                   background: "#ededed"
                 }}
@@ -86,29 +100,36 @@ function Chat() {
                 key={index}
                 cursor={"pointer"}
                 onClick={() => {
-                  setOnClose(!onClose);
-
-                  addChat({
-                    participants: [
-                      {
-                        id: authUser.uid,
-                        fullname:
-                          userOtherInfo.firstName +
-                          " " +
-                          userOtherInfo.lastName,
-                        profileImage: authUser.photoURL
-                      },
-                      {
-                        id: user.friendId,
-                        fullname: user.friendFullname,
-                        profileImage: user.friendProfileImage
-                      }
-                    ]
-                  });
+                  if (userOtherInfo.chats) {
+                    console.log("chatId", userOtherInfo.chats);
+                    getChatId(user.friendId);
+                  } else {
+                    console.log("chatId", userOtherInfo.chats);
+                    addChat({
+                      participants: [
+                        {
+                          id: authUser.uid,
+                          fullname:
+                            userOtherInfo.firstName +
+                            " " +
+                            userOtherInfo.lastName,
+                          profileImage: authUser.photoURL
+                        },
+                        {
+                          id: user.friendId,
+                          fullname: user.friendFullname,
+                          profileImage: user.friendProfileImage
+                        }
+                      ]
+                    });
+                  }
                 }}
               >
                 <Flex align={"center"} gap={4}>
-                  <Avatar src={user.friendProfileImage} />
+                  <Avatar
+                    src={user.friendProfileImage}
+                    name={user.friendFullname}
+                  />
                   <Flex direction={"column"}>
                     <Text m={0} fontSize={20} fontWeight={"bold"}>
                       {user.friendFullname}
@@ -118,14 +139,12 @@ function Chat() {
               </Flex>
             );
           } else {
-            console.log("user");
             return (
               <Flex
-                mt={4}
                 align={"center"}
                 justify={"space-between"}
                 px={3}
-                py={4}
+                py={2}
                 _hover={{
                   background: "#ededed"
                 }}
@@ -134,29 +153,26 @@ function Chat() {
                 key={index}
                 cursor={"pointer"}
                 onClick={() => {
-                  setOnClose(!onClose);
-
-                  addChat({
-                    participants: [
-                      {
-                        id: authUser.uid,
-                        fullname:
-                          userOtherInfo.firstName +
-                          " " +
-                          userOtherInfo.lastName,
-                        profileImage: authUser.photoURL
-                      },
-                      {
-                        id: user.friendId,
-                        fullname: user.friendFullname,
-                        profileImage: user.friendProfileImage
-                      }
-                    ]
-                  });
+                  addChat([
+                    {
+                      id: authUser.uid,
+                      fullname:
+                        userOtherInfo.firstName + " " + userOtherInfo.lastName,
+                      profileImage: authUser.photoURL
+                    },
+                    {
+                      id: user.friendId,
+                      fullname: user.friendFullname,
+                      profileImage: user.friendProfileImage
+                    }
+                  ]);
                 }}
               >
                 <Flex align={"center"} gap={4}>
-                  <Avatar src={user.friendProfileImage} />
+                  <Avatar
+                    src={user.friendProfileImage}
+                    name={user.friendFullname}
+                  />
                   <Flex direction={"column"}>
                     <Text m={0} fontSize={20} fontWeight={"bold"}>
                       {user.friendFullname}
