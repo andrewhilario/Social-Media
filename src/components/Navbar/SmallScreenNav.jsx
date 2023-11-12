@@ -15,9 +15,11 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function SmallScreenNav({ websiteName }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { logout } = useAuth();
 
   return (
     <>
@@ -99,6 +101,19 @@ function SmallScreenNav({ websiteName }) {
             </Link>
             <Link to="/profile">
               <Text>Profile</Text>
+            </Link>
+            {/* Logout */}
+            <Link
+              to="/"
+              onClick={async () => {
+                try {
+                  await logout();
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+            >
+              <Text>Logout</Text>
             </Link>
           </DrawerBody>
         </DrawerContent>
