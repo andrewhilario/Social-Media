@@ -89,6 +89,9 @@ const Messages = () => {
             },
             { merge: true }
           );
+          // Scroll to bottom with new message
+          const bottomMsg = document.getElementById("messageBox");
+          bottomMsg.scrollIntoView({ behavior: "smooth" });
           setLoading(false);
           // console.log("New message added to chat.", newMessage);
         } else if (participants[1]?.id.includes(authUser.uid)) {
@@ -108,6 +111,10 @@ const Messages = () => {
             },
             { merge: true }
           );
+          // Scroll to bottom with new message
+          const bottomMsg = document.getElementById("messageBox");
+          bottomMsg.scrollIntoView({ behavior: "smooth" });
+
           setLoading(false);
         }
       } else {
@@ -263,6 +270,18 @@ const Messages = () => {
                 xl: "82vh"
               }}
               direction={"column"}
+              overflowY={"scroll"}
+              overflowX={"hidden"}
+              css={`
+                &::-webkit-scrollbar {
+                  width: 5px;
+                  padding-left: 5px;
+                }
+                &::-webkit-scrollbar-thumb {
+                  border-radius: 100px;
+                  background-color: #a4a4a4;
+                }
+              `}
             >
               {msg?.map((message, index) => {
                 // if (message.id === friendId) {
@@ -276,7 +295,7 @@ const Messages = () => {
                     mt={5}
                     key={index}
                   >
-                    {msgId}
+                    {/* {msgId} */}
                     <Flex
                       gap={"10px"}
                       align="center"
@@ -291,6 +310,7 @@ const Messages = () => {
                         }
                         p={"10px"}
                         borderRadius={"md"}
+                        marginBottom={"10px"}
                       >
                         <Text
                           m={0}
@@ -308,19 +328,7 @@ const Messages = () => {
                 );
                 // }
               })}
-              {/* <Box display={"flex"} alignSelf={"flex-start"} mt={5}>
-                <Flex gap={"10px"} align="center" >
-                  <Avatar />
-                  <Box
-                    w={"fit-content"}
-                    bg={"#ededed"}
-                    p={"10px"}
-                    borderRadius={"md"}
-                  >
-                    <Text m={0}>Hello</Text>
-                  </Box>
-                </Flex>
-              </Box> */}
+              <Box id="messageBox" pb={5} />
             </Flex>
             {/* Footer */}
             <Flex gap={"12px"} align={"center"} mt={"auto"}>
