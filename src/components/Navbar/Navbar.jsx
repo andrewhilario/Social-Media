@@ -128,7 +128,7 @@ function Navbar({ websiteName, paddingVertical, logoMargin }) {
                 src={user?.photoURL}
               />
             </MenuButton>
-            <MenuList py={"1.2rem"} px={".5rem"}>
+            <MenuList py={"1.2rem"} px={".5rem"} zIndex={3}>
               <MenuItem borderRadius={"10px"}>
                 <Flex
                   onClick={() => {
