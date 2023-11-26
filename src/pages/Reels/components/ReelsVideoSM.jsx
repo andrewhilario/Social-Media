@@ -1,9 +1,16 @@
 /* eslint-disable react/jsx-key */
-import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Flex,
+  Image,
+  Text,
+  useDisclosure
+} from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import Reels1 from "../../../assets/videos/reels-video-1.mp4";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { PiShareFat } from "react-icons/pi";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -12,10 +19,11 @@ import {
   BiSolidVolumeFull,
   BiSolidVolumeMute
 } from "react-icons/bi";
-import { getAllReels } from "../../../hooks/useReels";
 import { Carousel } from "react-responsive-carousel";
 import { useAuth } from "../../../context/AuthContext";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
+import { getAllReels, getCommentReel, likeReel } from "../../../hooks/useReels";
+import ReelComments from "./ReelComments";
 
 function ReelsVideoSM() {
   const [playingStates, setPlayingStates] = useState({});
@@ -25,6 +33,9 @@ function ReelsVideoSM() {
   const playerRef = useRef(null);
   const { reels, isLoading } = getAllReels();
   const { user } = useAuth();
+  const [isLiked, setIsLiked] = useState(false);
+  const [currentReelId, setCurrentReelId] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const initialPlayingStates = {};
@@ -93,6 +104,16 @@ function ReelsVideoSM() {
     // Update the active index
     setActiveIndex(newIndex);
   };
+
+  const handleLike = (reelId) => {
+    likeReel(reelId, isLiked);
+  };
+
+  const openModalWithReelId = (reelId) => {
+    setCurrentReelId(reelId); // Set the current reelId
+    onOpen(); // Open the modal
+  };
+
   return (
     <>
       <Flex
@@ -197,22 +218,56 @@ function ReelsVideoSM() {
                 align={"center"}
                 gap={5}
               >
-                <Box>
-                  <AiOutlineLike fontSize={24} color={"white"} />
-                  <Text color={"white"} fontSize={12} mt={"15px"}>
-                    1.2k
+                <ReelComments
+                  isOpenModal={isOpen}
+                  onCloseModal={onClose}
+                  reelId={currentReelId}
+                />
+                <Flex
+                  direction={"column"}
+                  align={"center"}
+                  onClick={() => {
+                    setIsLiked(!isLiked);
+                    handleLike(reel.reelId);
+                  }}
+                >
+                  {isLiked ? (
+                    <AiFillLike fontSize={26} color={"white"} />
+                  ) : (
+                    <AiOutlineLike fontSize={26} color={"white"} />
+                  )}
+
+                  <Text
+                    fontWeight={"bold"}
+                    color={"white"}
+                    fontSize={12}
+                    mt={"7px"}
+                  >
+                    {reel.likes}
                   </Text>
-                </Box>
-                <Box>
-                  <FaRegCommentAlt fontSize={24} color={"white"} />
-                  <Text color={"white"} fontSize={12} mt={"15px"}>
-                    1.2k
+                </Flex>
+                <Flex
+                  direction={"column"}
+                  align={"center"}
+                  onClick={() => {
+                    openModalWithReelId(reel.reelId);
+                    console.log(reel.reelId);
+                  }}
+                >
+                  <FaRegCommentAlt fontSize={26} color={"white"} />
+                  <Text
+                    fontWeight={"bold"}
+                    color={"white"}
+                    fontSize={12}
+                    mt={"15px"}
+                  >
+                    {reel.comments?.length}
                   </Text>
-                </Box>
+                </Flex>
                 <Box>
                   <PiShareFat fontSize={24} color={"white"} />
                   <Text color={"white"} fontSize={12} mt={"15px"}>
-                    1.2k
+                    {/* 1.2k */}
                   </Text>
                 </Box>
                 <HiDotsHorizontal fontSize={24} color={"white"} />

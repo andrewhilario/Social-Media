@@ -101,10 +101,15 @@ const ReelComments = ({ isOpenModal, onCloseModal, reelId }) => {
       <Modal
         isOpen={isOpenModal}
         onClose={onCloseModal}
-        size={"xl"}
+        size={{
+          base: "sm",
+          md: "md",
+          xl: "xl"
+        }}
         onEsc={onCloseModal}
         scrollBehavior={"inside"}
         blockScrollOnMount={false}
+        trapFocus={false}
       >
         <ModalOverlay />
         <ModalContent>
@@ -116,7 +121,11 @@ const ReelComments = ({ isOpenModal, onCloseModal, reelId }) => {
           <Divider m={0} background={"#000000"} />
           <ModalBody>
             <Box
-              h={"50vh"}
+              h={{
+                base: "100%",
+                md: "400px",
+                xl: "50vh"
+              }}
               overflowY={"scroll"}
               css={{
                 "&::-webkit-scrollbar": {

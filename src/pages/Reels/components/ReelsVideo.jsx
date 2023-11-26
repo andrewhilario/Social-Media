@@ -27,8 +27,7 @@ import { FaComment, FaShare } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { CCarousel, CCarouselItem } from "@coreui/react";
-import { getAllReels, getCommentReel } from "../../../hooks/useReels";
-import { likeReel } from "../../../hooks/useReels.js";
+import { getAllReels, getCommentReel, likeReel } from "../../../hooks/useReels";
 import ReelComments from "./ReelComments.jsx";
 
 function ReelsVideo() {
