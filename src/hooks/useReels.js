@@ -86,7 +86,7 @@ export const likeReel = async (reelId, isLiked) => {
   }
 
   await updateDoc(reelRef, {
-    likes: isLiked ? reelData.likes - 1 : reelData.likes + 1
+    likes: !isLiked ? reelData.likes - 1 : reelData.likes + 1
   });
 };
 
@@ -100,8 +100,6 @@ export const commentReel = async (
   const reelRef = doc(db, "reels", reelId);
 
   const reelSnapshot = await getDoc(reelRef);
-
-  const reelData = reelSnapshot.data();
 
   if (!reelSnapshot.exists()) {
     throw new Error("No such document!");
