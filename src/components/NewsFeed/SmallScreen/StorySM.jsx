@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StoryItem from "../StoryItem";
 import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
 import Person1 from "../../../assets/images/person-1.jpg";
@@ -11,6 +11,8 @@ import Person4Place from "../../../assets/images/person-4-place.jpg";
 import Person5 from "../../../assets/images/person-5.jpg";
 import Person5Place from "../../../assets/images/person-5-place.jpg";
 import { useAuth } from "../../../context/AuthContext";
+import { useGetStories } from "../../../hooks/useStories";
+import Carousel from "react-multi-carousel";
 
 const Person_2 = {
   name: "Joanna Doe",
@@ -36,74 +38,111 @@ const Person_5 = {
 
 function StorySM() {
   const { user } = useAuth();
+  const { getLatest, storyId } = useGetStories();
+
+  useEffect(() => {
+    console.log("fetching stories", getLatest ? getLatest : "no stories");
+
+    return () => {};
+  }, []);
 
   return (
-    <Box
+    <Flex
       w={{
         base: "90vw",
         md: "95vw",
-        lg: "95vw"
+        lg: "90%"
       }}
       mx={"auto"}
-      style={{
-        overflowX: "scroll",
-        overflowY: "hidden",
-        whiteSpace: "nowrap",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-        "&::WebkitScrollbar": {
-          display: "none"
-        }
-      }}
+      gap={2}
+      my={2}
     >
-      <Grid
+      <Box
         w={{
-          base: "200%",
-          md: "125%",
-          lg: "100%"
+          base: "33%",
+          md: "25%",
+          lg: "20%"
         }}
-        margin={"0 auto"}
-        templateColumns="repeat(5, 1fr)"
-        gap={2}
-        py={4}
+        cursor={"pointer"}
+        onClick={() => {
+          window.location.href = "/stories/";
+        }}
       >
-        <GridItem w={"100%"}>
-          <StoryItem image={user.photoURL} name={"Your Story"} />
-        </GridItem>
-        <GridItem w={"100%"}>
-          <StoryItem
-            image={Person_2.backgroundImg}
-            name={Person_2.name}
-            profileSrc={Person_2.profileSrc}
-            isLoggedIn={true}
-          />
-        </GridItem>
-        <GridItem w={"100%"}>
-          <StoryItem
-            image={Person_3.backgroundImg}
-            name={Person_3.name}
-            profileSrc={Person_3.profileSrc}
-            isLoggedIn={true}
-          />
-        </GridItem>
-        <GridItem w={"100%"}>
-          <StoryItem
-            image={Person_4.backgroundImg}
-            name={Person_4.name}
-            profileSrc={Person_4.profileSrc}
-            isLoggedIn={true}
-          />
-        </GridItem>
-        <GridItem w={"100%"}>
-          <StoryItem
-            image={Person_5.backgroundImg}
-            name={Person_5.name}
-            profileSrc={Person_5.profileSrc}
-            isLoggedIn={true}
-          />
-        </GridItem>
-      </Grid>
-    </Box>
+        <StoryItem image={user.photoURL} name={"Your Story"} />
+      </Box>
+      <Box
+        w={{
+          base: "67%",
+          md: "75%",
+          lg: "80%"
+        }}
+      >
+        <Carousel
+          responsive={{
+            desktop: {
+              breakpoint: {
+                max: 3000,
+                min: 1024
+              },
+              items: 4
+            },
+            smallerMobile: {
+              breakpoint: {
+                max: 0,
+                min: 340
+              },
+              items: 1
+            },
+            mobile: {
+              breakpoint: {
+                max: 464,
+                min: 0
+              },
+              items: 2
+            },
+            tablet: {
+              breakpoint: {
+                max: 1024,
+                min: 464
+              },
+              items: 4
+            }
+          }}
+          swipeable={false}
+          draggable={false}
+          ssr={false} // means to render carousel on server-side.
+          infinite={false}
+          autoPlay={false}
+          autoPlaySpeed={1000}
+          keyBoardControl={true}
+          customTransition="all .5 ease"
+          transitionDuration={100}
+          containerClass="carousel-container"
+          itemClass="carousel-item-padding-50-px"
+        >
+          {getLatest.map((story, index) => {
+            return (
+              <GridItem
+                w={"100%"}
+                mr={2}
+                key={story.storyId}
+                cursor={"pointer"}
+                onClick={() => {
+                  window.location.href = "/stories/" + story.userId;
+                }}
+              >
+                <StoryItem
+                  image={story.fileUrl}
+                  name={story.userFullname}
+                  profileSrc={story.userProfilePhoto}
+                  isLoggedIn={true}
+                />
+              </GridItem>
+            );
+          })}
+        </Carousel>
+      </Box>
+    </Flex>
   );
 }
 

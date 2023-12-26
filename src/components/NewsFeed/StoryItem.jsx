@@ -27,6 +27,7 @@ function StoryItem({ image, profileSrc, name, isLoggedIn }) {
           <Avatar
             src={profileSrc}
             alt={profileSrc}
+            name={name}
             border={"2px solid white"}
           />
         </Box>

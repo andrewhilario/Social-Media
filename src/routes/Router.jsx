@@ -13,6 +13,9 @@ import Notification from "../pages/FriendRequests/FriendRequests";
 import FriendRequests from "../pages/FriendRequests/FriendRequests";
 import Messages from "../pages/Messages/Messages";
 import CreateReels from "../pages/Reels/CreateReels";
+import { Text } from "@chakra-ui/react";
+import Stories from "../pages/Stories/Stories";
+import ViewStories from "../pages/Stories/ViewStories";
 
 export default function Router() {
   // const [isAuth, setIsAuth] = useState(checkAuth());
@@ -30,6 +33,8 @@ export default function Router() {
           <Route path="/chat/:chatId" element={<Messages />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/reels/create" element={<CreateReels />} />
+          <Route path="/stories/" element={<Stories />} />
+          <Route path="/stories/:storyId" element={<ViewStories />} />
           <Route path="/admin" element={<Admin active={0} />} />
           <Route path="/admin/users" element={<Admin active={1} />} />
           <Route path="/admin/earnings" element={<Admin active={2} />} />
