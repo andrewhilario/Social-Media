@@ -19,14 +19,39 @@ const ViewStories = () => {
   const stories = userStory?.stories;
 
   const storyImages = stories?.map((story) => {
-    return {
-      url: story.fileUrl,
-      header: {
-        heading: story.userFullname,
-        subheading: formatDistance(new Date(story.uploadDate), new Date()),
-        profileImage: story.userProfilePhoto
-      }
-    };
+    if (story.fileUrl) {
+      return {
+        url: story.fileUrl,
+        header: {
+          heading: story.userFullname,
+          subheading: formatDistance(new Date(story.uploadDate), new Date()),
+          profileImage: story.userProfilePhoto
+        }
+      };
+    } else {
+      return {
+        content: ({ action, isPaused }) => {
+          return (
+            <Flex
+              w={"100%"}
+              h={"100%"}
+              bgGradient={story.gradient}
+              justify={"center"}
+              align={"center"}
+            >
+              <Text
+                color={"white"}
+                fontSize={story.fontSize}
+                fontWeight={"bold"}
+                textAlign={"center"}
+              >
+                {story.text}
+              </Text>
+            </Flex>
+          );
+        }
+      };
+    }
   });
 
   useEffect(() => {

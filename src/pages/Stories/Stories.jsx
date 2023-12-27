@@ -129,6 +129,8 @@ const Stories = () => {
       const fullName = `${userOtherInfo.firstName} ${userOtherInfo.lastName}`;
 
       await createStories(data, null, user.uid, fullName, user.photoURL);
+
+      console.log("Story with text", data);
     }
   };
 

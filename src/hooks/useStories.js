@@ -32,7 +32,7 @@ export const useStories = () => {
 
     try {
       let fileUrl = null;
-      console.log(fileData.name);
+
       if (fileData) {
         const fileRef = ref(storage, `stories/${fileData.name}`);
         console.log(fileRef);
@@ -52,10 +52,29 @@ export const useStories = () => {
         uploadDate: new Date().toISOString()
       };
 
-      const docSnap = await getDoc(storiesRef);
-      const currentData = docSnap.data();
+      if (fileUrl) {
+        const docSnap = await getDoc(storiesRef);
+        const currentData = docSnap.data();
 
-      if (docSnap.exists()) {
+        if (docSnap.exists()) {
+          await setDoc(
+            storiesRef,
+            {
+              stories: arrayUnion(newStory, ...currentData.stories)
+            },
+            { merge: true }
+          );
+        } else {
+          await setDoc(storiesRef, {
+            stories: arrayUnion(newStory)
+          });
+        }
+      } else {
+        const docSnap = await getDoc(storiesRef);
+        const currentData = docSnap.data();
+
+        console.log("currentData", currentData);
+
         await setDoc(
           storiesRef,
           {
@@ -63,19 +82,15 @@ export const useStories = () => {
           },
           { merge: true }
         );
-      } else {
-        await setDoc(storiesRef, {
-          stories: arrayUnion(newStory)
-        });
       }
 
       setLoading(false);
       console.log("Story successfully added!");
       // reload the page
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log("Error adding document: ", error);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
