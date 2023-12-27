@@ -87,10 +87,10 @@ export const useStories = () => {
       setLoading(false);
       console.log("Story successfully added!");
       // reload the page
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("Error adding document: ", error);
-      // window.location.reload();
+      window.location.reload();
     }
   };
 
