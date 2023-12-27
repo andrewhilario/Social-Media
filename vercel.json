@@ -1,3 +1,9 @@
 {
-    "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }],
+  "cron": [
+    {
+      "path": "/api/cron",
+      "schedule": "@daily"
+    }
+  ]
 }
