@@ -87,7 +87,7 @@ export const useStories = () => {
       setLoading(false);
       console.log("Story successfully added!");
       // reload the page
-      window.location.reload();
+      window.location.href = "/";
     } catch (error) {
       console.log("Error adding document: ", error);
       window.location.reload();
