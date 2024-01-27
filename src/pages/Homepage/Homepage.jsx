@@ -27,9 +27,7 @@ function Homepage() {
   //   authListener();
   // }, []);
 
-  if (!user) {
-    return <HomepageLoader />;
-  } else {
+  if (user) {
     return (
       <>
         <Helmet>
@@ -87,6 +85,8 @@ function Homepage() {
         )}
       </>
     );
+  } else {
+    <HomepageLoader />;
   }
 }
 

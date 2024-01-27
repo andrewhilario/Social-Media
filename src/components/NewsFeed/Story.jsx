@@ -111,9 +111,9 @@ function Story() {
           {getLatest.map((story, index) => {
             return (
               <GridItem
+                key={story}
                 w={"100%"}
                 mr={2}
-                key={story.storyId}
                 cursor={"pointer"}
                 onClick={() => {
                   window.location.href = "/stories/" + story.userId;

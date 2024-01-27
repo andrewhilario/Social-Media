@@ -42,9 +42,8 @@ function Chat() {
 
   const getChatId = async (friendId) => {
     const chatId = userOtherInfo.chats;
-    console.log("chatId", authUser.uid);
     chatId.map((chat) => {
-      if (chat.participants.id === friendId) {
+      if (chat.participant.id === friendId) {
         console.log("chatId", chat.id);
         navigate(`/chat/${chat.id}`);
       }
@@ -85,103 +84,115 @@ function Chat() {
         </>
       ) : (
         friends.map((user, index) => {
-          if (user.friendId === authUser.uid) {
-            return (
-              <Flex
-                align={"center"}
-                justify={"space-between"}
-                px={3}
-                py={2}
-                _hover={{
-                  background: "#ededed"
-                }}
-                alignItems={"center"}
-                borderRadius={"10px"}
-                key={index}
-                cursor={"pointer"}
-                onClick={() => {
-                  if (userOtherInfo.chats) {
-                    console.log("chatId", userOtherInfo.chats);
-                    getChatId(user.friendId);
-                  } else {
-                    console.log("chatId", userOtherInfo.chats);
-                    addChat({
-                      participants: [
-                        {
-                          id: authUser.uid,
-                          fullname:
-                            userOtherInfo.firstName +
-                            " " +
-                            userOtherInfo.lastName,
-                          profileImage: authUser.photoURL
-                        },
-                        {
-                          id: user.friendId,
-                          fullname: user.friendFullname,
-                          profileImage: user.friendProfileImage
-                        }
-                      ]
-                    });
-                  }
-                }}
-              >
-                <Flex align={"center"} gap={4}>
-                  <Avatar
-                    src={user.friendProfileImage}
-                    name={user.friendFullname}
-                  />
-                  <Flex direction={"column"}>
-                    <Text m={0} fontSize={20} fontWeight={"bold"}>
-                      {user.friendFullname}
-                    </Text>
-                  </Flex>
+          // if (user.friendId === authUser.uid) {
+          return (
+            <Flex
+              align={"center"}
+              justify={"space-between"}
+              px={3}
+              py={2}
+              _hover={{
+                background: "#ededed"
+              }}
+              alignItems={"center"}
+              borderRadius={"10px"}
+              key={index}
+              cursor={"pointer"}
+              onClick={() => {
+                if (userOtherInfo.chats) {
+                  console.log(`Friend ID ${index + 1}`, user.friendId);
+                  getChatId(user.friendId);
+                } else {
+                  console.log("chatId", userOtherInfo.chats);
+                  addChat({
+                    participants: [
+                      {
+                        id: authUser.uid,
+                        fullname:
+                          userOtherInfo.firstName +
+                          " " +
+                          userOtherInfo.lastName,
+                        profileImage: authUser.photoURL
+                      },
+                      {
+                        id: user.friendId,
+                        fullname: user.friendFullname,
+                        profileImage: user.friendProfileImage
+                      }
+                    ]
+                  });
+                }
+              }}
+            >
+              <Flex align={"center"} gap={4}>
+                <Avatar
+                  src={user.friendProfileImage}
+                  name={user.friendFullname}
+                />
+                <Flex direction={"column"}>
+                  <Text m={0} fontSize={20} fontWeight={"bold"}>
+                    {user.friendFullname}
+                  </Text>
                 </Flex>
               </Flex>
-            );
-          } else {
-            return (
-              <Flex
-                align={"center"}
-                justify={"space-between"}
-                px={3}
-                py={2}
-                _hover={{
-                  background: "#ededed"
-                }}
-                alignItems={"center"}
-                borderRadius={"10px"}
-                key={index}
-                cursor={"pointer"}
-                onClick={() => {
-                  addChat([
-                    {
-                      id: authUser.uid,
-                      fullname:
-                        userOtherInfo.firstName + " " + userOtherInfo.lastName,
-                      profileImage: authUser.photoURL
-                    },
-                    {
-                      id: user.friendId,
-                      fullname: user.friendFullname,
-                      profileImage: user.friendProfileImage
-                    }
-                  ]);
-                }}
-              >
-                <Flex align={"center"} gap={4}>
-                  <Avatar
-                    src={user.friendProfileImage}
-                    name={user.friendFullname}
-                  />
-                  <Flex direction={"column"}>
-                    <Text m={0} fontSize={20} fontWeight={"bold"}>
-                      {user.friendFullname}
-                    </Text>
-                  </Flex>
-                </Flex>
-              </Flex>
-            );
-          }
+            </Flex>
+          );
+          // } else {
+          //   console.log("True");
+          //   return (
+          //     <Flex
+          //       align={"center"}
+          //       justify={"space-between"}
+          //       px={3}
+          //       py={2}
+          //       _hover={{
+          //         background: "#ededed"
+          //       }}
+          //       alignItems={"center"}
+          //       borderRadius={"10px"}
+          //       key={index}
+          //       cursor={"pointer"}
+          //       onClick={() => {
+          //         if (userOtherInfo.chats) {
+          //           console.log("Friend ID 2", user.friendId);
+          //           getChatId(user.friendId);
+
+          //           console.log("chatId", userOtherInfo.chats);
+          //         } else {
+          //           addChat({
+          //             participants: [
+          //               {
+          //                 id: authUser.uid,
+          //                 fullname:
+          //                   userOtherInfo.firstName +
+          //                   " " +
+          //                   userOtherInfo.lastName,
+          //                 profileImage: authUser.photoURL
+          //               },
+          //               {
+          //                 id: user.friendId,
+          //                 fullname: user.friendFullname,
+          //                 profileImage: user.friendProfileImage
+          //               }
+          //             ]
+          //           });
+          //         }
+          //       }}
+          //     >
+          //       <Flex align={"center"} gap={4}>
+          //         <Avatar
+          //           src={user.friendProfileImage}
+          //           name={user.friendFullname}
+          //         />
+          //         <Flex direction={"column"}>
+          //           <Text m={0} fontSize={20} fontWeight={"bold"}>
+          //             {user.friendFullname}
+          //           </Text>
+          //         </Flex>
+          //       </Flex>
+          //     </Flex>
+          //   );
+          // }
         })
       )}
     </>

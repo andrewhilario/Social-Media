@@ -48,17 +48,30 @@ function PostHeader(props) {
                 {props.dateTime ?? " Sept. 6, 2023, 4:00 PM"}
               </Text>
               {props.postVisibility === "Public" ? (
-                <Flex
-                  alignItems={"center"}
-                  ml={3}
-                  color={"gray.500"}
-                  fontSize={12}
-                >
-                  <BsGlobeAsiaAustralia fontSize={14} />
-                  <Text mb={0} as={"span"} ml={1} fontSize={12}>
-                    Public
-                  </Text>
-                </Flex>
+                props.isSharedPost ? (
+                  <Flex
+                    alignItems={"center"}
+                    ml={3}
+                    color={"gray.500"}
+                    fontSize={12}
+                  >
+                    <Text mb={0} as={"span"} ml={1} fontSize={12}>
+                      Shared
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Flex
+                    alignItems={"center"}
+                    ml={3}
+                    color={"gray.500"}
+                    fontSize={12}
+                  >
+                    <BsGlobeAsiaAustralia fontSize={14} />
+                    <Text mb={0} as={"span"} ml={1} fontSize={12}>
+                      Public
+                    </Text>
+                  </Flex>
+                )
               ) : (
                 <Flex
                   alignItems={"center"}

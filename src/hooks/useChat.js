@@ -21,15 +21,17 @@ const useChat = () => {
     const id = uuid();
     const chatRef = doc(db, "chats", id);
     const userRef = doc(db, "users", user.uid);
-    const friendRef = doc(db, "users", participants[1].id);
+    const friendRef = doc(db, "users", participants.participants[1].id);
     const userSnap = await getDoc(userRef);
+    const chatParticipant = participants.participants;
 
     // console.log(participants[0].id, user.uid);
-    if (participants[0].id === user.uid) {
+    if (chatParticipant[0].id === user.uid) {
+      console.log("here");
       if (userSnap.data().chats) {
         if (userSnap.data().chats.length > 0) {
           userSnap.data().chats.forEach(async (chat) => {
-            if (chat.participant.id === participants[1].id) {
+            if (chat.participant.id === chatParticipant[1].id) {
               navigate(`/chat/${chat.id}`);
             }
           });
@@ -38,7 +40,7 @@ const useChat = () => {
             chatRef,
             {
               id,
-              participants,
+              chatParticipant,
               messages: []
             },
             { merge: true }
@@ -48,7 +50,7 @@ const useChat = () => {
             {
               chats: arrayUnion({
                 id,
-                participant: participants[1]
+                participant: chatParticipant[1]
               })
             },
             { merge: true }
@@ -59,7 +61,7 @@ const useChat = () => {
             {
               chats: arrayUnion({
                 id,
-                participant: participants[0]
+                participant: chatParticipant[0]
               })
             },
             { merge: true }
@@ -71,7 +73,7 @@ const useChat = () => {
           chatRef,
           {
             id,
-            participants,
+            chatParticipant,
             messages: []
           },
           { merge: true }
@@ -81,7 +83,7 @@ const useChat = () => {
           {
             chats: arrayUnion({
               id,
-              participant: participants[1]
+              participant: chatParticipant[1]
             })
           },
           { merge: true }
@@ -92,7 +94,7 @@ const useChat = () => {
           {
             chats: arrayUnion({
               id,
-              participant: participants[0]
+              participant: chatParticipant[0]
             })
           },
           { merge: true }

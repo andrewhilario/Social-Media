@@ -18,6 +18,7 @@ import PostFooter from "./PostFooter";
 import { useAuth } from "../../context/AuthContext";
 
 function Post({
+  isSharePost,
   width,
   postUser,
   postUserImage,
@@ -46,7 +47,12 @@ function Post({
 
   return (
     <>
-      <Card w={width ?? "90%"} m={"10px auto"} p={3}>
+      <Card
+        w={width ? width : isSharePost ? "100%" : "90%"}
+        m={"10px auto"}
+        p={3}
+        border={!isSharePost ? "none" : "1px solid #21559d"}
+      >
         <PostHeader
           name={postUser}
           profileSrc={postUserImage}
@@ -150,7 +156,9 @@ function Post({
             }
           })}
         </Grid>
-        <PostFooter postId={postId} postAuthorId={postAuthorId} />
+        {!isSharePost && (
+          <PostFooter postId={postId} postAuthorId={postAuthorId} />
+        )}
       </Card>
     </>
   );

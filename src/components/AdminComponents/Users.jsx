@@ -197,7 +197,7 @@ function Users() {
           <Tbody>
             {sortedData.map((user, index) => {
               return (
-                <Tr key={index} _hover={{ backgroundColor: "blue.50" }}>
+                <Tr key={user.id} _hover={{ backgroundColor: "blue.50" }}>
                   <Td>
                     <Checkbox colorScheme="blue" size="lg" />
                   </Td>

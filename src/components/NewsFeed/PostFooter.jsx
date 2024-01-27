@@ -8,7 +8,8 @@ import {
   Text,
   Link,
   useMediaQuery,
-  useToast
+  useToast,
+  useDisclosure
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -27,10 +28,15 @@ import { db } from "../../firebase/firebase";
 import useComment from "../../hooks/useComment";
 import { useForm } from "react-hook-form";
 import { getComment } from "../../hooks/getComments";
+import { SharePost } from "../SharePost";
+import useSharePost from "../../hooks/useSharePost";
 
 function PostFooter({ postId, postAuthorId }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLiked, setIsLiked] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [shares, setShares] = useState(0);
   const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
   const [comms, setComments] = useState([]);
 
@@ -45,6 +51,8 @@ function PostFooter({ postId, postAuthorId }) {
   //Like
   const { toggleLike } = useLike(postId, user?.uid, isLiked);
 
+  // Share
+
   const handleToggle = () => {
     toggleLike();
   };
@@ -54,8 +62,14 @@ function PostFooter({ postId, postAuthorId }) {
     onSnapshot(postRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data();
-        setLikes(data.likes.length);
-        setIsLiked(data.likes.includes(user?.uid));
+        const likes = data.likes?.length ? data.likes.length : 0;
+        const isLiked = data.likes?.includes(user?.uid) ? true : false;
+        const shares = data.shares?.length ? data.shares.length : 0;
+        const sharedBy = data.shares?.includes(user?.uid) ? true : false;
+        setLikes(likes);
+        setIsLiked(isLiked);
+        setShares(shares);
+        setIsShared(sharedBy);
       }
     });
   };
@@ -91,6 +105,12 @@ function PostFooter({ postId, postAuthorId }) {
           md: 4
         }}
       >
+        <SharePost
+          isOpen={isOpen}
+          onClose={onClose}
+          postId={postId}
+          isShared={isShared}
+        />
         <Flex alignItems={"center"}>
           <Button
             bg={"none"}
@@ -134,17 +154,22 @@ function PostFooter({ postId, postAuthorId }) {
         <Flex alignItems={"center"}>
           <Button
             bg={"none"}
+            _hover={{
+              bg: "#0C71F5",
+              color: "white"
+            }}
             borderRadius="100%"
             _active={{ borderRadius: "100%" }}
             _focus={{ borderRadius: "100%" }}
             p={0}
             w={10}
             h={10}
+            onClick={onOpen}
           >
             <FaShare />
           </Button>
           <Text mb={0} ml={1} fontSize={14}>
-            {isScreenSmall ? "" : "shares"}
+            {shares} {isScreenSmall ? "" : "shares"}
           </Text>
         </Flex>
       </Flex>
@@ -211,7 +236,7 @@ function PostFooter({ postId, postAuthorId }) {
                   color={"#0077ff"}
                   href={`/post/${postId}`}
                   ml={1}
-                  key={index}
+                  key={postId}
                 >
                   <Text
                     mt={4}

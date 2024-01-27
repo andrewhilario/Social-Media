@@ -18,7 +18,7 @@ const useFriends = () => {
   const { user } = useAuth();
 
   const listAllFriends = async () => {
-    const friendsRef = doc(db, "friends", user.uid);
+    const friendsRef = doc(db, "friends", user?.uid);
     const friendsSnap = await getDoc(friendsRef);
     const friends = friendsSnap.data().friends;
 

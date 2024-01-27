@@ -6,26 +6,50 @@ import Post from "./Post";
 import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../hooks/usePosts";
-import { formatDistance } from "date-fns";
-import { Box, Center, Spinner, Text } from "@chakra-ui/react";
-import { doc, getDoc } from "firebase/firestore";
+import { formatDistance, set } from "date-fns";
+import { Box, Card, Center, Spinner, Text } from "@chakra-ui/react";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import ChatBubble from "../ChatBubble/ChatBubble";
+import useSharePost from "../../hooks/useSharePost";
+import { useGetSharePost } from "../../hooks/useGetSharePost";
+import useGetUserInfoById from "../../hooks/useGetUserInfoById";
+import PostHeader from "./PostHeader";
+import SharePostComponent from "./SharePost";
 
 function NewsFeed() {
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { posts, isLoading } = usePosts();
+  const { sharePost } = useGetSharePost();
 
   const [postUser, setPostUser] = React.useState("");
   const [postUserImage, setPostUserImage] = React.useState(null);
 
+  const { fetchUserInfo } = useGetUserInfoById();
+  const [allPostings, setAllPostings] = React.useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    // console.log(posts.map((post) => post?.authorId));
+    if (posts && sharePost) {
+      console.log("Original sharePost length:", sharePost.length);
+
+      const postData = posts.map((post) => ({ ...post, type: "original" }));
+      const sharedPostData = sharePost.map((post) => ({
+        ...post,
+        type: "shared"
+      }));
+
+      console.log(
+        "After mapping - sharedPostData length:",
+        sharedPostData.length
+      );
+
+      setAllPostings([...postData, ...sharedPostData]);
+    }
 
     const authListener = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -35,7 +59,6 @@ function NewsFeed() {
             setPostUser(doc.data().firstName + " " + doc.data().lastName);
             setPostUserImage(doc.data().photoURL);
           } else {
-            // doc.data() will be undefined in this case
             console.log("No such document!");
           }
         });
@@ -43,7 +66,8 @@ function NewsFeed() {
     });
 
     authListener();
-  });
+    return () => {};
+  }, [posts, sharePost]);
 
   return (
     <Box>
@@ -72,30 +96,59 @@ function NewsFeed() {
           />
         </Center>
       ) : (
-        posts?.map((post, index) => {
-          return (
-            post?.postVisibility === "Public" && (
-              <Post
-                onPostClick={() => {
-                  navigate(`/post/${post?.postId}`);
-                }}
-                key={index}
-                postUser={post?.postUser}
-                postUserImage={post?.postUserImage ?? ""}
-                post={post?.post}
-                postImages={post?.postImages}
-                postDateTime={
-                  formatDistance(
-                    new Date(post?.createdAt?.toDate()),
-                    new Date()
-                  ) + " ago"
-                }
-                postVisibility={post?.postVisibility}
-                postAuthorId={post.authorId}
-                postId={post?.postId}
-              />
-            )
-          );
+        allPostings?.reverse().map((post, index) => {
+          if (post.type === "shared") {
+            console.log("created", post.createdAt.toDate());
+            return (
+              <Box
+                key={post}
+                w={"90%"}
+                m={"10px auto"}
+                p={3}
+                bg={"white"}
+                borderRadius={"10px"}
+              >
+                <PostHeader
+                  name={post.userName}
+                  profileSrc={post.userImage}
+                  postVisibility={"Public"}
+                  dateTime={
+                    formatDistance(
+                      new Date(post?.createdAt?.toDate()),
+                      new Date()
+                    ) + " ago"
+                  }
+                  isSharedPost={true}
+                />
+
+                <SharePostComponent postId={post.postId} />
+              </Box>
+            );
+          } else {
+            return (
+              post.postVisibility === "Public" && (
+                <Post
+                  onPostClick={() => {
+                    navigate(`/post/${post?.postId}`);
+                  }}
+                  key={post?.postId}
+                  postUser={post?.postUser}
+                  postUserImage={post?.postUserImage ?? ""}
+                  post={post?.post}
+                  postImages={post?.postImages}
+                  postDateTime={
+                    formatDistance(
+                      new Date(post?.createdAt?.toDate()),
+                      new Date()
+                    ) + " ago"
+                  }
+                  postVisibility={post?.postVisibility}
+                  postAuthorId={post.authorId}
+                  postId={post?.postId}
+                />
+              )
+            );
+          }
         })
       )}
     </Box>
