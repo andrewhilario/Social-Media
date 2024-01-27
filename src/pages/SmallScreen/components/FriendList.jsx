@@ -11,6 +11,7 @@ import useFriends from "../../../hooks/useFriends";
 import { useAuth } from "../../../context/AuthContext";
 import useChat from "../../../hooks/useChat";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
+import { useNavigate } from "react-router-dom";
 
 const FriendList = () => {
   const { listAllFriends } = useFriends();
@@ -18,11 +19,23 @@ const FriendList = () => {
   const { user: authUser } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { addChat } = useChat();
+  const navigate = useNavigate();
 
   const fetchFriends = async () => {
     const list = await listAllFriends();
     setFriends(list);
   };
+
+  const getChatId = async (friendId) => {
+    const chatId = userOtherInfo.chats;
+    chatId.map((chat) => {
+      if (chat.participant.id === friendId) {
+        console.log("chatId", chat.id);
+        navigate(`/chat/${chat.id}`);
+      }
+    });
+  };
+
   useEffect(() => {
     if (authUser) {
       if (friends) {
@@ -47,19 +60,29 @@ const FriendList = () => {
               margin={"10px 20px"}
               key={user.id}
               onClick={() => {
-                addChat([
-                  {
-                    id: authUser.uid,
-                    fullname:
-                      userOtherInfo.firstName + " " + userOtherInfo.lastName,
-                    profileImage: authUser.photoURL
-                  },
-                  {
-                    id: user.friendId,
-                    fullname: user.friendFullname,
-                    profileImage: user.friendProfileImage
-                  }
-                ]);
+                if (userOtherInfo.chats) {
+                  console.log(`Friend ID ${index + 1}`, user.friendId);
+                  getChatId(user.friendId);
+                } else {
+                  console.log("chatId", userOtherInfo.chats);
+                  addChat({
+                    participants: [
+                      {
+                        id: authUser.uid,
+                        fullname:
+                          userOtherInfo.firstName +
+                          " " +
+                          userOtherInfo.lastName,
+                        profileImage: authUser.photoURL
+                      },
+                      {
+                        id: user.friendId,
+                        fullname: user.friendFullname,
+                        profileImage: user.friendProfileImage
+                      }
+                    ]
+                  });
+                }
               }}
             >
               <Avatar
@@ -79,19 +102,29 @@ const FriendList = () => {
                 key={user.id}
                 margin={"10px 0"}
                 onClick={() => {
-                  addChat([
-                    {
-                      id: authUser.uid,
-                      fullname:
-                        userOtherInfo.firstName + " " + userOtherInfo.lastName,
-                      profileImage: authUser.photoURL
-                    },
-                    {
-                      id: user.friendId,
-                      fullname: user.friendFullname,
-                      profileImage: user.friendProfileImage
-                    }
-                  ]);
+                  if (userOtherInfo.chats) {
+                    console.log(`Friend ID ${index + 1}`, user.friendId);
+                    getChatId(user.friendId);
+                  } else {
+                    console.log("chatId", userOtherInfo.chats);
+                    addChat({
+                      participants: [
+                        {
+                          id: authUser.uid,
+                          fullname:
+                            userOtherInfo.firstName +
+                            " " +
+                            userOtherInfo.lastName,
+                          profileImage: authUser.photoURL
+                        },
+                        {
+                          id: user.friendId,
+                          fullname: user.friendFullname,
+                          profileImage: user.friendProfileImage
+                        }
+                      ]
+                    });
+                  }
                 }}
               >
                 <Avatar

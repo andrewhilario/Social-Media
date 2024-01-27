@@ -25,7 +25,6 @@ const useChat = () => {
     const userSnap = await getDoc(userRef);
     const chatParticipant = participants.participants;
 
-    // console.log(participants[0].id, user.uid);
     if (chatParticipant[0].id === user.uid) {
       console.log("here");
       if (userSnap.data().chats) {

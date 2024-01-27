@@ -12,9 +12,12 @@ import { usePosts } from "../../../hooks/usePosts";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase/firebase";
-import { Center, Spinner, Text } from "@chakra-ui/react";
+import { Box, Center, Spinner, Text } from "@chakra-ui/react";
 import { formatDistance } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { useGetSharePost } from "../../../hooks/useGetSharePost";
+import PostHeader from "../PostHeader";
+import SharePostComponent from "../SharePost";
 
 function NewsFeedSM() {
   const { user } = useAuth();
@@ -23,9 +26,26 @@ function NewsFeedSM() {
   const navigate = useNavigate();
   const [postUser, setPostUser] = React.useState("");
   const [postUserImage, setPostUserImage] = React.useState(null);
+  const { sharePost } = useGetSharePost();
+  const [allPostings, setAllPostings] = React.useState([]);
 
   useEffect(() => {
-    // console.log(posts.map((post) => post?.authorId));
+    if (posts && sharePost) {
+      console.log("Original sharePost length:", sharePost.length);
+
+      const postData = posts.map((post) => ({ ...post, type: "original" }));
+      const sharedPostData = sharePost.map((post) => ({
+        ...post,
+        type: "shared"
+      }));
+
+      console.log(
+        "After mapping - sharedPostData length:",
+        sharedPostData.length
+      );
+
+      setAllPostings([...postData, ...sharedPostData]);
+    }
 
     const authListener = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -43,7 +63,7 @@ function NewsFeedSM() {
     });
 
     authListener();
-  });
+  }, [posts, sharePost]);
   return (
     <>
       <CreatePostSM />
@@ -70,32 +90,62 @@ function NewsFeedSM() {
           />
         </Center>
       ) : (
-        posts?.map((post, index) => {
-          return (
-            post?.postVisibility === "Public" && (
-              <PostSM
-                width={"100%"}
-                key={index}
-                postUser={post?.postUser}
-                postUserImage={post?.postUserImage ?? ""}
-                post={post?.post}
-                postImages={post?.postImages}
-                postDateTime={
-                  formatDistance(
-                    new Date(post?.createdAt?.toDate()),
-                    new Date()
-                  ) + " ago"
-                }
-                postVisibility={post?.postVisibility}
-                userUid={post?.authorId}
-                onPostClick={() => {
-                  navigate(`/post/${post?.postId}`);
-                }}
-                postAuthorId={post.authorId}
-                postId={post?.postId}
-              />
-            )
-          );
+        allPostings?.reverse().map((post, index) => {
+          if (post.type === "shared") {
+            console.log("created", post.createdAt.toDate());
+            return (
+              <Box
+                key={post}
+                w={"100%"}
+                m={"10px auto"}
+                p={3}
+                bg={"white"}
+                borderRadius={"10px"}
+                shadow={"lg"}
+              >
+                <PostHeader
+                  name={post.userName}
+                  profileSrc={post.userImage}
+                  postVisibility={"Public"}
+                  dateTime={
+                    formatDistance(
+                      new Date(post?.createdAt?.toDate()),
+                      new Date()
+                    ) + " ago"
+                  }
+                  isSharedPost={true}
+                />
+
+                <SharePostComponent postId={post.postId} />
+              </Box>
+            );
+          } else {
+            return (
+              post.postVisibility === "Public" && (
+                <PostSM
+                  width={"100%"}
+                  key={index}
+                  postUser={post?.postUser}
+                  postUserImage={post?.postUserImage ?? ""}
+                  post={post?.post}
+                  postImages={post?.postImages}
+                  postDateTime={
+                    formatDistance(
+                      new Date(post?.createdAt?.toDate()),
+                      new Date()
+                    ) + " ago"
+                  }
+                  postVisibility={post?.postVisibility}
+                  userUid={post?.authorId}
+                  onPostClick={() => {
+                    navigate(`/post/${post?.postId}`);
+                  }}
+                  postAuthorId={post.authorId}
+                  postId={post?.postId}
+                />
+              )
+            );
+          }
         })
       )}
     </>

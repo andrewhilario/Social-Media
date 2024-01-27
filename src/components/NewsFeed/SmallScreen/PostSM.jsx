@@ -18,6 +18,7 @@ import PostHeader from "../PostHeader";
 import PostFooter from "../PostFooter";
 
 function PostSM({
+  isSharePost,
   width,
   postUser,
   postUserImage,
@@ -46,7 +47,11 @@ function PostSM({
 
   return (
     <>
-      <Card w={width ?? "90%"} m={"10px auto"} p={3}>
+      <Card
+        w={width ? width : isSharePost ? "100%" : "90%"}
+        m={"10px auto"}
+        p={3}
+      >
         <PostHeader
           name={postUser}
           profileSrc={postUserImage}
@@ -149,7 +154,7 @@ function PostSM({
             }
           })}
         </Grid>
-        <PostFooter postId={postId} />
+        {!isSharePost && <PostFooter postId={postId} />}
       </Card>
     </>
   );
