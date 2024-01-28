@@ -25,48 +25,19 @@ const useChat = () => {
     const userSnap = await getDoc(userRef);
     const chatParticipant = participants.participants;
 
-    if (chatParticipant[0].id === user.uid) {
-      console.log("here");
-      if (userSnap.data().chats) {
-        if (userSnap.data().chats.length > 0) {
-          userSnap.data().chats.forEach(async (chat) => {
-            if (chat.participant.id === chatParticipant[1].id) {
-              navigate(`/chat/${chat.id}`);
-            }
-          });
-        } else {
-          await setDoc(
-            chatRef,
-            {
-              id,
-              chatParticipant,
-              messages: []
-            },
-            { merge: true }
-          );
-          await setDoc(
-            userRef,
-            {
-              chats: arrayUnion({
-                id,
-                participant: chatParticipant[1]
-              })
-            },
-            { merge: true }
-          );
+    if (chatParticipant[0].id === user.uid && userSnap.exists()) {
+      const userChatData = userSnap.data();
 
-          await setDoc(
-            friendRef,
-            {
-              chats: arrayUnion({
-                id,
-                participant: chatParticipant[0]
-              })
-            },
-            { merge: true }
-          );
-          navigate(`/chat/${id}`);
-        }
+      const existingChat = userChatData.chats.find((chat) => {
+        return (
+          chat.participant.id === chatParticipant[1].id &&
+          chat.chatExist === true
+        );
+      });
+
+      if (existingChat) {
+        console.log("Chat exists");
+        navigate(`/chat/${existingChat.id}`);
       } else {
         await setDoc(
           chatRef,
@@ -77,12 +48,14 @@ const useChat = () => {
           },
           { merge: true }
         );
+
         await setDoc(
           userRef,
           {
             chats: arrayUnion({
               id,
-              participant: chatParticipant[1]
+              participant: chatParticipant[1],
+              chatExist: true
             })
           },
           { merge: true }
@@ -93,11 +66,13 @@ const useChat = () => {
           {
             chats: arrayUnion({
               id,
-              participant: chatParticipant[0]
+              participant: chatParticipant[0],
+              chatExist: true
             })
           },
           { merge: true }
         );
+
         navigate(`/chat/${id}`);
       }
     }

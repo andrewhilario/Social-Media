@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { USERS } from "../../../constant/users";
 import useFriends from "../../../hooks/useFriends";
 import { useAuth } from "../../../context/AuthContext";
-import { set } from "date-fns";
+import { add, set } from "date-fns";
 import { list } from "firebase/storage";
 import { fr } from "date-fns/locale";
 import { onAuthStateChanged } from "firebase/auth";
@@ -40,12 +40,29 @@ function Chat() {
     setFriends(list);
   };
 
-  const getChatId = async (friendId) => {
+  const getChatId = async (friendId, friendFullname, friendProfileImage) => {
     const chatId = userOtherInfo.chats;
+
     chatId.map((chat) => {
-      if (chat.participant.id === friendId) {
-        console.log("chatId", chat.id);
+      if (chat.participant.id === friendId && chat.chatExist === true) {
+        console.log("here 1", chat.participant.id);
         navigate(`/chat/${chat.id}`);
+      } else if (chat.participant.id !== friendId) {
+        console.log("here 2");
+        addChat({
+          participants: [
+            {
+              id: authUser.uid,
+              fullname: userOtherInfo.firstName + " " + userOtherInfo.lastName,
+              profileImage: authUser.photoURL
+            },
+            {
+              id: friendId,
+              fullname: friendFullname,
+              profileImage: friendProfileImage
+            }
+          ]
+        });
       }
     });
   };
@@ -99,11 +116,27 @@ function Chat() {
               key={index}
               cursor={"pointer"}
               onClick={() => {
-                if (userOtherInfo.chats) {
-                  console.log(`Friend ID ${index + 1}`, user.friendId);
-                  getChatId(user.friendId);
-                } else {
-                  console.log("chatId", userOtherInfo.chats);
+                let existingChatFound = false;
+
+                userOtherInfo.chats.some((chat) => {
+                  if (
+                    chat.participant.id === user.friendId &&
+                    chat.chatExist === true
+                  ) {
+                    console.log(
+                      "Chat already exists. Navigating to existing chat."
+                    );
+                    navigate(`/chat/${chat.id}`);
+                    // Set the flag to true to indicate an existing chat is found
+                    existingChatFound = true;
+                    // Exit the loop once a matching chat is found
+                    return true;
+                  }
+                  return false; // Not necessary, but it explicitly indicates to continue the loop
+                });
+
+                // Check the flag before creating a new chat
+                if (!existingChatFound) {
                   addChat({
                     participants: [
                       {

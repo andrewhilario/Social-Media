@@ -87,15 +87,19 @@ const Messages = () => {
   };
 
   const upload = async () => {
-    const storageRef = ref(storage, "images");
-
-    const imageRef = ref(storageRef, images[0]?.name);
-    const imageURL = await uploadBytes(imageRef, images[0]).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-      return getDownloadURL(imageRef);
-    });
-
-    return imageURL;
+    if (images.length > 0) {
+      const storageRef = ref(storage, "images");
+      const imageRef = ref(storageRef, images[0]?.name);
+      const imageURL = await uploadBytes(imageRef, images[0]).then(
+        (snapshot) => {
+          console.log("Uploaded a blob or file!");
+          return getDownloadURL(imageRef);
+        }
+      );
+      return imageURL;
+    } else {
+      return "";
+    }
   };
 
   const handleSendMessage = async (data) => {
@@ -169,6 +173,36 @@ const Messages = () => {
               const bottomMsg = document.getElementById("messageBox");
               bottomMsg.scrollIntoView({ behavior: "smooth" });
               setLoading(false);
+            } else {
+              const newMessage = {
+                id: authUser.uid,
+                message: data.message,
+                image: "",
+                // video: videoUrl,
+                profileImage: authUser.photoURL,
+                userFullname:
+                  userOtherInfo.firstName + " " + userOtherInfo.lastName,
+                timestamp: new Date()
+              };
+
+              if (chatSnap.data().messages) {
+                await setDoc(
+                  chatRef,
+                  {
+                    messages: [...messages, newMessage],
+                    chatParticipant: [...chatParticipant]
+                  },
+                  { merge: true }
+                );
+              } else {
+                await setDoc(chatRef, {
+                  messages: [newMessage]
+                });
+              }
+
+              const bottomMsg = document.getElementById("messageBox");
+              bottomMsg.scrollIntoView({ behavior: "smooth" });
+              setLoading(false);
             }
           }
         } else if (chatParticipant[1]?.id.includes(authUser.uid)) {
@@ -201,6 +235,36 @@ const Messages = () => {
                 id: authUser.uid,
                 message: data.message,
                 image: imageLink,
+                profileImage: authUser.photoURL,
+                userFullname:
+                  userOtherInfo.firstName + " " + userOtherInfo.lastName,
+                timestamp: new Date()
+              };
+
+              if (chatSnap.data().messages) {
+                await setDoc(
+                  chatRef,
+                  {
+                    messages: [...messages, friendMessage]
+                  },
+                  { merge: true }
+                );
+              } else {
+                await setDoc(chatRef, {
+                  messages: [friendMessage],
+                  chatParticipant: [...chatParticipant]
+                });
+              }
+              // Scroll to bottom with new message
+              const bottomMsg = document.getElementById("messageBox");
+              bottomMsg.scrollIntoView({ behavior: "smooth" });
+
+              setLoading(false);
+            } else {
+              const friendMessage = {
+                id: authUser.uid,
+                message: data.message,
+                image: "",
                 profileImage: authUser.photoURL,
                 userFullname:
                   userOtherInfo.firstName + " " + userOtherInfo.lastName,
@@ -421,21 +485,21 @@ const Messages = () => {
                       xl: "block"
                     }}
                     onClick={() => {
-                      addChat([
-                        {
-                          id: authUser.uid,
-                          fullname:
-                            userOtherInfo.firstName +
-                            " " +
-                            userOtherInfo.lastName,
-                          profileImage: authUser.photoURL
-                        },
-                        {
-                          id: user.friendId,
-                          fullname: user.friendFullname,
-                          profileImage: user.friendProfileImage
-                        }
-                      ]);
+                      // addChat([
+                      //   {
+                      //     id: authUser.uid,
+                      //     fullname:
+                      //       userOtherInfo.firstName +
+                      //       " " +
+                      //       userOtherInfo.lastName,
+                      //     profileImage: authUser.photoURL
+                      //   },
+                      //   {
+                      //     id: user.friendId,
+                      //     fullname: user.friendFullname,
+                      //     profileImage: user.friendProfileImage
+                      //   }
+                      // ]);
                     }}
                   >
                     <Flex align={"center"} gap={"10px"}>
@@ -515,7 +579,9 @@ const Messages = () => {
                             >
                               {message.message}
                             </Text>
-                            {message.image && (
+                            {message.image === "" ? (
+                              <></>
+                            ) : (
                               <Image
                                 key={index}
                                 src={message.image}
