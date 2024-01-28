@@ -42,7 +42,13 @@ const SharePost = (props) => {
       scrollBehavior="inside"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent
+        w={{
+          base: "90%",
+          md: "100%",
+          lg: "100%"
+        }}
+      >
         <ModalHeader>Share Post</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
