@@ -16,10 +16,12 @@ import { useDisclosure } from "@chakra-ui/react";
 import useGetUserOtherInfo from "./useGetUserOtherInfo";
 
 const useSharePost = (postId, isShared) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
 
   const sharePost = async () => {
+    setIsLoading(true);
     try {
       const id = uuid();
       const postRef = doc(db, "posts", postId);
@@ -39,13 +41,15 @@ const useSharePost = (postId, isShared) => {
           userName: userOtherInfo?.firstName + " " + userOtherInfo?.lastName,
           createdAt: new Date()
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error sharing post:", error);
+      setIsLoading(false);
     }
   };
 
-  return { sharePost };
+  return { sharePost, isLoading };
 };
 
 export default useSharePost;

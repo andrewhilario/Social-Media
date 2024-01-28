@@ -20,7 +20,7 @@ import useSharePost from "../../hooks/useSharePost";
 const SharePost = (props) => {
   const postId = props.postId;
   const isShared = props.isShared;
-  const { sharePost } = useSharePost(postId, isShared);
+  const { sharePost, isLoading } = useSharePost(postId, isShared);
 
   const { postData } = usePost(postId);
 
@@ -63,13 +63,16 @@ const SharePost = (props) => {
           <Button
             colorScheme="blue"
             mr={3}
+            isLoading={isLoading}
             onClick={() => {
               sharePost();
               props.onClose();
-              window.location.reload();
+              setTimeout(() => {
+                window.location.reload();
+              }, 1500);
             }}
           >
-            Share
+            {isLoading ? "Sharing" : "Share"}
           </Button>
           <Button
             variant="ghost"
