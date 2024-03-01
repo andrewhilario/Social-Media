@@ -39,7 +39,10 @@ const useSharePost = (postId, isShared) => {
           userId: user.uid,
           userImage: user.photoURL,
           userName: userOtherInfo?.firstName + " " + userOtherInfo?.lastName,
-          createdAt: new Date()
+          createdAt: new Date(),
+          likes: [],
+          comments: [],
+          shares: []
         });
         setIsLoading(false);
       }

@@ -7,7 +7,15 @@ import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../hooks/usePosts";
 import { formatDistance, set } from "date-fns";
-import { Box, Card, Center, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  Center,
+  Flex,
+  Spinner,
+  Text
+} from "@chakra-ui/react";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../firebase/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -18,6 +26,8 @@ import { useGetSharePost } from "../../hooks/useGetSharePost";
 import useGetUserInfoById from "../../hooks/useGetUserInfoById";
 import PostHeader from "./PostHeader";
 import SharePostComponent from "./SharePost";
+import { BiCommentDetail, BiLike } from "react-icons/bi";
+import PostFooter from "./PostFooter";
 
 function NewsFeed() {
   const { user } = useAuth();
@@ -98,7 +108,7 @@ function NewsFeed() {
       ) : (
         allPostings?.reverse().map((post, index) => {
           if (post.type === "shared") {
-            console.log("created", post.createdAt.toDate());
+            console.log("Shared post:", post);
             return (
               <Box
                 key={post}
@@ -122,6 +132,8 @@ function NewsFeed() {
                 />
 
                 <SharePostComponent postId={post.postId} />
+                {/* Create a like and comment */}
+                <PostFooter sharedPostId={post?.id} postId={post.postId} />
               </Box>
             );
           } else {

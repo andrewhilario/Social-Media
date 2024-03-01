@@ -22,7 +22,7 @@ import { BsSendFill } from "react-icons/bs";
 import { FaShare } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
-import useLike from "../../hooks/useLike";
+import useLike, { useSharePostLike } from "../../hooks/useLike";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import useComment from "../../hooks/useComment";
@@ -31,7 +31,7 @@ import { getComment } from "../../hooks/getComments";
 import { SharePost } from "../SharePost";
 import useSharePost from "../../hooks/useSharePost";
 
-function PostFooter({ postId, postAuthorId }) {
+function PostFooter({ postId, sharedPostId, postAuthorId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLiked, setIsLiked] = useState(false);
   const [isShared, setIsShared] = useState(false);
@@ -40,39 +40,40 @@ function PostFooter({ postId, postAuthorId }) {
   const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
   const [comms, setComments] = useState([]);
 
+  // sharedpost footer
+  const [sharedPostLikes, setSharedPostLikes] = useState(0);
+  const [sharedPostShares, setSharedPostShares] = useState(0);
+  const [sharedPostIsLiked, setSharedPostIsLiked] = useState(false);
+  const [sharedPostIsShared, setSharedPostIsShared] = useState(false);
+
   const { user } = useAuth();
   const { userOtherInfo } = useGetUserOtherInfo();
   const { register, handleSubmit, formState: error, reset } = useForm();
   //Comments
   const { addComment } = useComment();
   const toast = useToast();
-  const { comments } = getComment(postId);
+  const { comments } = getComment(sharedPostId ? sharedPostId : postId);
 
   //Like
   const { toggleLike } = useLike(postId, user?.uid, isLiked);
 
+  const { toggleLikeShared } = useSharePostLike(
+    sharedPostId,
+    user?.uid,
+    sharedPostIsLiked
+  );
+
   // Share
 
   const handleToggle = () => {
-    toggleLike();
+    if (sharedPostId) {
+      console.log("shared post");
+      toggleLikeShared();
+    } else {
+      toggleLike();
+    }
   };
-  const getLikesLength = async () => {
-    const postRef = doc(db, "posts", postId);
 
-    onSnapshot(postRef, (doc) => {
-      if (doc.exists()) {
-        const data = doc.data();
-        const likes = data.likes?.length ? data.likes.length : 0;
-        const isLiked = data.likes?.includes(user?.uid) ? true : false;
-        const shares = data.shares?.length ? data.shares.length : 0;
-        const sharedBy = data.shares?.includes(user?.uid) ? true : false;
-        setLikes(likes);
-        setIsLiked(isLiked);
-        setShares(shares);
-        setIsShared(sharedBy);
-      }
-    });
-  };
   //on submit comments
   const onSubmit = (data) => {
     const commentPost = data.comment;
@@ -88,12 +89,59 @@ function PostFooter({ postId, postAuthorId }) {
       isClosable: true
     });
 
-    addComment(postId, commentPost, fullName);
+    if (sharedPostId) {
+      addComment(sharedPostId, commentPost, fullName);
+    } else {
+      addComment(postId, commentPost, fullName);
+    }
   };
-  // get comments
 
   useEffect(() => {
+    const getSharedPostLikesLength = async () => {
+      const postRef = doc(db, "shared-posts", sharedPostId);
+
+      onSnapshot(postRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          const likes = data.likes?.length ? data.likes.length : 0;
+          const isLiked = data.likes?.includes(user?.uid) ? true : false;
+          const shares = data.shares?.length ? data.shares.length : 0;
+          const sharedBy = data.shares?.includes(user?.uid) ? true : false;
+          setSharedPostLikes(likes);
+          setSharedPostIsLiked(isLiked);
+          setSharedPostShares(shares);
+          setSharedPostIsShared(sharedBy);
+        }
+      });
+    };
+
+    const getLikesLength = async () => {
+      let postRef;
+      if (sharedPostId) {
+        postRef = doc(db, "shared-posts", sharedPostId);
+      } else {
+        postRef = doc(db, "posts", postId);
+      }
+
+      onSnapshot(postRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          const likes = data.likes?.length ? data.likes.length : 0;
+          const isLiked = data.likes?.includes(user?.uid) ? true : false;
+          const shares = data.shares?.length ? data.shares.length : 0;
+          const sharedBy = data.shares?.includes(user?.uid) ? true : false;
+          setLikes(likes);
+          setIsLiked(isLiked);
+          setShares(shares);
+          setIsShared(sharedBy);
+        }
+      });
+    };
+
     getLikesLength();
+    getSharedPostLikesLength();
+
+    console.log("COMMENTS", comments);
   });
 
   return (
@@ -122,7 +170,18 @@ function PostFooter({ postId, postAuthorId }) {
             h={10}
             onClick={handleToggle}
           >
-            {isLiked ? <BiSolidLike color={"#0C71F5"} /> : <BiLike />}
+            {sharedPostId ? (
+              sharedPostIsLiked ? (
+                <BiSolidLike color={"#0C71F5"} />
+              ) : (
+                <BiLike />
+              )
+            ) : isLiked ? (
+              <BiSolidLike color={"#0C71F5"} />
+            ) : (
+              <BiLike />
+            )}
+            {/* {isLiked ? <BiSolidLike color={"#0C71F5"} /> : <BiLike />} */}
           </Button>
           <Text
             mb={0}
@@ -132,7 +191,8 @@ function PostFooter({ postId, postAuthorId }) {
             }}
             fontSize={14}
           >
-            {likes} {isScreenSmall ? "" : "likes"}
+            {sharedPostId ? sharedPostLikes : likes}{" "}
+            {isScreenSmall ? "" : "likes"}
           </Text>
         </Flex>
         <Flex alignItems={"center"}>
@@ -169,7 +229,8 @@ function PostFooter({ postId, postAuthorId }) {
             <FaShare />
           </Button>
           <Text mb={0} ml={1} fontSize={14}>
-            {shares} {isScreenSmall ? "" : "shares"}
+            {sharedPostId ? sharedPostShares : shares}{" "}
+            {isScreenSmall ? "" : "shares"}
           </Text>
         </Flex>
       </Flex>
@@ -203,7 +264,6 @@ function PostFooter({ postId, postAuthorId }) {
           <BsSendFill fontSize={"1.5rem"} />
         </Button>
       </Flex>
-      {/* The code below will be added next week */}
       {comments &&
         comments.map((comment, index) => {
           if (index === 1) {
@@ -234,9 +294,9 @@ function PostFooter({ postId, postAuthorId }) {
                 </Flex>
                 <Link
                   color={"#0077ff"}
-                  href={`/post/${postId}`}
+                  href={`/post/${sharedPostId ? sharedPostId : postId}`}
                   ml={1}
-                  key={postId}
+                  key={sharedPostId ? sharedPostId : postId}
                 >
                   <Text
                     mt={4}

@@ -25,7 +25,7 @@ const useComment = () => {
   const addComment = async (postId, comment) => {
     try {
       const id = Math.random().toString(36).substring(7);
-      const date = Date.now();
+      const date = new Date();
       const postRef = doc(db, "comments", id);
       await setDoc(postRef, {
         postId: postId,

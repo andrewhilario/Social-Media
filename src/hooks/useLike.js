@@ -24,4 +24,20 @@ const useLike = (postId, userId, isLiked) => {
   return { toggleLike };
 };
 
+export const useSharePostLike = (sharedPostId, userId, isLiked) => {
+  const toggleLikeShared = async () => {
+    try {
+      const postRef = doc(db, "shared-posts", sharedPostId);
+      console.log("sharedPostId", sharedPostId);
+      await updateDoc(postRef, {
+        likes: isLiked ? arrayRemove(userId) : arrayUnion(userId)
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { toggleLikeShared };
+};
+
 export default useLike;
