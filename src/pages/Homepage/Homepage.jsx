@@ -16,16 +16,16 @@ function Homepage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const authListener = () => {
-  //     if (!user) {
-  //       navigate("/login");
-  //     } else {
-  //       navigate("/");
-  //     }
-  //   };
-  //   authListener();
-  // }, []);
+  useEffect(() => {
+    const authListener = () => {
+      if (!user) {
+        navigate("/login");
+      } else {
+        navigate("/");
+      }
+    };
+    authListener();
+  }, []);
 
   if (user) {
     return (
