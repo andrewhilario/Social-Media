@@ -25,7 +25,6 @@ import { IoLockClosed } from "react-icons/io5";
 import { BiLike, BiComment, BiSolidLike } from "react-icons/bi";
 import { PiShareFatBold } from "react-icons/pi";
 import { BsSendFill } from "react-icons/bs";
-import { useAuth } from "../../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
@@ -37,6 +36,7 @@ import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import useComment from "../../hooks/useComment";
 import { getComment } from "../../hooks/getComments";
 import { useForm } from "react-hook-form";
+import useAuth from "../../context/useAuth";
 
 function ViewPost() {
   const { user } = useAuth();

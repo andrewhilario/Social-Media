@@ -20,10 +20,10 @@ import {
   BiSolidVolumeMute
 } from "react-icons/bi";
 import { Carousel } from "react-responsive-carousel";
-import { useAuth } from "../../../context/AuthContext";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
 import { getAllReels, getCommentReel, likeReel } from "../../../hooks/useReels";
 import ReelComments from "./ReelComments";
+import useAuth from "../../../context/useAuth";
 
 function ReelsVideoSM() {
   const [playingStates, setPlayingStates] = useState({});

@@ -9,10 +9,10 @@ import {
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout";
 import useAddFriend from "../../hooks/useAddFriend";
-import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { useNavigate } from "react-router-dom";
 import { BsCheckLg, BsTrash3 } from "react-icons/bs";
+import useAuth from "../../context/useAuth";
 
 const FriendRequests = () => {
   const { listFriendRequest, confirmRequest, removeFriend } = useAddFriend();

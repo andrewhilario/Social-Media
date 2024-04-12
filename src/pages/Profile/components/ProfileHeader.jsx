@@ -22,10 +22,10 @@ import ProfilePost from "./ProfilePost";
 import { FiEdit } from "react-icons/fi";
 import UpdateProfileModal from "./UpdateProfileModal";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
-import { useAuth } from "../../../context/AuthContext";
 import ProfileLoader from "../../../loaders/ProfileLoader";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiUserPlus } from "react-icons/bi";
+import useAuth from "../../../context/useAuth";
 
 function ProfileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();

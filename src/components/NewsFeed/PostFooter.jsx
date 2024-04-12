@@ -20,7 +20,7 @@ import {
 } from "react-icons/bi";
 import { BsSendFill } from "react-icons/bs";
 import { FaShare } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
+
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import useLike, { useSharePostLike } from "../../hooks/useLike";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 import { getComment } from "../../hooks/getComments";
 import { SharePost } from "../SharePost";
 import useSharePost from "../../hooks/useSharePost";
+import useAuth from "../../context/useAuth";
 
 function PostFooter({ postId, sharedPostId, postAuthorId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,6 +40,13 @@ function PostFooter({ postId, sharedPostId, postAuthorId }) {
   const [shares, setShares] = useState(0);
   const [isScreenSmall] = useMediaQuery("(max-width: 320px)");
   const [comms, setComments] = useState([]);
+  const [sharedPostLikesData, setSharedPostLikesData] = useState(null); // shared post likes data
+  const [likesData, setLikesData] = useState({
+    postId: null, // Regular post ID
+    sharedPostId: null, // Shared post ID
+    likes: 0,
+    isLiked: false
+  });
 
   // sharedpost footer
   const [sharedPostLikes, setSharedPostLikes] = useState(0);
@@ -54,27 +62,6 @@ function PostFooter({ postId, sharedPostId, postAuthorId }) {
   const toast = useToast();
   const { comments } = getComment(sharedPostId ? sharedPostId : postId);
 
-  //Like
-  const { toggleLike } = useLike(postId, user?.uid, isLiked);
-
-  const { toggleLikeShared } = useSharePostLike(
-    sharedPostId,
-    user?.uid,
-    sharedPostIsLiked
-  );
-
-  // Share
-
-  const handleToggle = () => {
-    if (sharedPostId) {
-      console.log("shared post");
-      toggleLikeShared();
-    } else {
-      toggleLike();
-    }
-  };
-
-  //on submit comments
   const onSubmit = (data) => {
     const commentPost = data.comment;
     const fullName = userOtherInfo?.firstName + " " + userOtherInfo?.lastName;
@@ -96,53 +83,56 @@ function PostFooter({ postId, sharedPostId, postAuthorId }) {
     }
   };
 
+  // const handleToggle = async () => {
+  //   await toggleLike();
+
+  //   if (sharedPostId) {
+  //     console.log("Toggling like for shared post");
+  //     toggleLikeShared();
+  //   }
+  // };
+  const { toggleLike } = useLike(postId, user?.uid, likesData.isLiked);
+  const { toggleLikeShared } = useSharePostLike(
+    sharedPostId,
+    user?.uid,
+    sharedPostLikesData?.isLiked
+  ); // Assuming sharedPostLikesData has isLiked
+
+  const handleToggle = async () => {
+    if (sharedPostId) {
+      await toggleLikeShared();
+    } else {
+      await toggleLike();
+    }
+  };
+
   useEffect(() => {
-    const getSharedPostLikesLength = async () => {
-      const postRef = doc(db, "shared-posts", sharedPostId);
-
-      onSnapshot(postRef, (doc) => {
-        if (doc.exists()) {
-          const data = doc.data();
-          const likes = data.likes?.length ? data.likes.length : 0;
-          const isLiked = data.likes?.includes(user?.uid) ? true : false;
-          const shares = data.shares?.length ? data.shares.length : 0;
-          const sharedBy = data.shares?.includes(user?.uid) ? true : false;
-          setSharedPostLikes(likes);
-          setSharedPostIsLiked(isLiked);
-          setSharedPostShares(shares);
-          setSharedPostIsShared(sharedBy);
-        }
-      });
-    };
-
-    const getLikesLength = async () => {
-      let postRef;
-      if (sharedPostId) {
-        postRef = doc(db, "shared-posts", sharedPostId);
-      } else {
-        postRef = doc(db, "posts", postId);
+    const unsubscribe = onSnapshot(doc(db, "posts", postId), (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setLikesData({
+          postId,
+          likes: data.likes?.length ?? 0,
+          isLiked: data.likes?.includes(user?.uid) ?? false
+        });
       }
+    });
 
-      onSnapshot(postRef, (doc) => {
+    return unsubscribe;
+  }, [postId, user?.uid]);
+
+  useEffect(() => {
+    if (sharedPostId) {
+      const postRef = doc(db, "shared-posts", sharedPostId);
+      const unsubscribe = onSnapshot(postRef, (doc) => {
         if (doc.exists()) {
-          const data = doc.data();
-          const likes = data.likes?.length ? data.likes.length : 0;
-          const isLiked = data.likes?.includes(user?.uid) ? true : false;
-          const shares = data.shares?.length ? data.shares.length : 0;
-          const sharedBy = data.shares?.includes(user?.uid) ? true : false;
-          setLikes(likes);
-          setIsLiked(isLiked);
-          setShares(shares);
-          setIsShared(sharedBy);
+          setSharedPostLikesData(doc.data());
         }
       });
-    };
 
-    getLikesLength();
-    getSharedPostLikesLength();
-
-    console.log("COMMENTS", comments);
-  });
+      return unsubscribe;
+    }
+  }, [sharedPostId]);
 
   return (
     <>
@@ -170,18 +160,13 @@ function PostFooter({ postId, sharedPostId, postAuthorId }) {
             h={10}
             onClick={handleToggle}
           >
-            {sharedPostId ? (
-              sharedPostIsLiked ? (
-                <BiSolidLike color={"#0C71F5"} />
-              ) : (
-                <BiLike />
-              )
-            ) : isLiked ? (
-              <BiSolidLike color={"#0C71F5"} />
+            {sharedPostLikesData?.isLiked ? (
+              <BiSolidLike color="#0C71F5" />
+            ) : likesData.isLiked ? (
+              <BiSolidLike color="#0C71F5" />
             ) : (
               <BiLike />
             )}
-            {/* {isLiked ? <BiSolidLike color={"#0C71F5"} /> : <BiLike />} */}
           </Button>
           <Text
             mb={0}
@@ -191,7 +176,7 @@ function PostFooter({ postId, sharedPostId, postAuthorId }) {
             }}
             fontSize={14}
           >
-            {sharedPostId ? sharedPostLikes : likes}{" "}
+            {sharedPostLikesData?.likes.length || likesData.likes.length}{" "}
             {isScreenSmall ? "" : "likes"}
           </Text>
         </Flex>

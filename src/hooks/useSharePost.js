@@ -11,9 +11,10 @@ import {
 
 import { v4 as uuid } from "uuid";
 import { auth, db } from "../firebase/firebase";
-import { useAuth } from "../context/AuthContext";
+
 import { useDisclosure } from "@chakra-ui/react";
 import useGetUserOtherInfo from "./useGetUserOtherInfo";
+import useAuth from "../context/useAuth";
 
 const useSharePost = (postId, isShared) => {
   const [isLoading, setIsLoading] = useState(false);

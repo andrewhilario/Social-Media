@@ -8,10 +8,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import useFriends from "../../../hooks/useFriends";
-import { useAuth } from "../../../context/AuthContext";
 import useChat from "../../../hooks/useChat";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../context/useAuth";
 
 const FriendList = () => {
   const { listAllFriends } = useFriends();

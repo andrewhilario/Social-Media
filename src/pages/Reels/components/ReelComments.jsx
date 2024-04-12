@@ -26,11 +26,11 @@ import {
 import { BsFillSendFill } from "react-icons/bs";
 import { commentReel } from "../../../hooks/useReels";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../../context/AuthContext";
 import useGetOtherUserInfo from "../../../hooks/useGetUserOtherInfo";
 import { getCommentReel } from "../../../hooks/useReels";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
+import useAuth from "../../../context/useAuth";
 
 const ReelComments = ({ isOpenModal, onCloseModal, reelId }) => {
   const { register, handleSubmit, reset } = useForm();

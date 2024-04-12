@@ -10,13 +10,13 @@ import Person4 from "../../assets/images/person-4.jpg";
 import Person4Place from "../../assets/images/person-4-place.jpg";
 import Person5 from "../../assets/images/person-5.jpg";
 import Person5Place from "../../assets/images/person-5-place.jpg";
-import { useAuth } from "../../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import { useGetStories } from "../../hooks/useStories";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../main.css";
+import useAuth from "../../context/useAuth";
 
 const Person_2 = {
   name: "Joanna Doe",

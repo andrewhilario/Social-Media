@@ -3,7 +3,6 @@ import Story from "./Story";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
 
-import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../hooks/usePosts";
 import { formatDistance, set } from "date-fns";
@@ -28,6 +27,7 @@ import PostHeader from "./PostHeader";
 import SharePostComponent from "./SharePost";
 import { BiCommentDetail, BiLike } from "react-icons/bi";
 import PostFooter from "./PostFooter";
+import useAuth from "../../context/useAuth";
 
 function NewsFeed() {
   const { user } = useAuth();
@@ -45,18 +45,11 @@ function NewsFeed() {
 
   useEffect(() => {
     if (posts && sharePost) {
-      console.log("Original sharePost length:", sharePost.length);
-
       const postData = posts.map((post) => ({ ...post, type: "original" }));
       const sharedPostData = sharePost.map((post) => ({
         ...post,
         type: "shared"
       }));
-
-      console.log(
-        "After mapping - sharedPostData length:",
-        sharedPostData.length
-      );
 
       setAllPostings([...postData, ...sharedPostData]);
     }
@@ -108,7 +101,6 @@ function NewsFeed() {
       ) : (
         allPostings?.reverse().map((post, index) => {
           if (post.type === "shared") {
-            console.log("Shared post:", post);
             return (
               <Box
                 key={post}
@@ -132,13 +124,14 @@ function NewsFeed() {
                 />
 
                 <SharePostComponent postId={post.postId} />
-                {/* Create a like and comment */}
+
                 <PostFooter sharedPostId={post?.id} postId={post.postId} />
               </Box>
             );
           } else {
             return (
-              post.postVisibility === "Public" && (
+              post.postVisibility === "Public" &&
+              post.type !== "shared" && (
                 <Post
                   onPostClick={() => {
                     navigate(`/post/${post?.postId}`);

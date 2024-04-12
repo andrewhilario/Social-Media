@@ -11,8 +11,9 @@ import {
 } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAuth } from "../context/AuthContext";
+
 import { db } from "../firebase/firebase";
+import useAuth from "../context/useAuth";
 
 const useFriends = () => {
   const { user } = useAuth();

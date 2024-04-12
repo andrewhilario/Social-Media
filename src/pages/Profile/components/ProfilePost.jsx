@@ -3,7 +3,6 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Post from "../../../components/NewsFeed/Post";
 import CreatePost from "../../../components/NewsFeed/CreatePost";
-import { useAuth } from "../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../../hooks/usePosts";
 import { formatDistance } from "date-fns";
@@ -20,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useNavigate, useParams } from "react-router-dom";
+import useAuth from "../../../context/useAuth";
 
 function ProfilePost() {
   const { user } = useAuth();

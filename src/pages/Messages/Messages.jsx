@@ -21,7 +21,6 @@ import {
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout";
 import useFriends from "../../hooks/useFriends";
-import { useAuth } from "../../context/AuthContext";
 import useChat from "../../hooks/useChat";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { addDoc, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
@@ -30,6 +29,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { MdAttachFile } from "react-icons/md";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import useAuth from "../../context/useAuth";
 
 const Messages = () => {
   const { listAllFriends } = useFriends();

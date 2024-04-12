@@ -6,7 +6,7 @@ import PostSM from "./PostSM";
 import Person1 from "../../../assets/images/person-1.jpg";
 import Person4 from "../../../assets/images/person-4.jpg";
 import Person4Selfie from "../../../assets/images/person-4-selfie.jpg";
-import { useAuth } from "../../../context/AuthContext";
+
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { usePosts } from "../../../hooks/usePosts";
 import { onAuthStateChanged } from "firebase/auth";
@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetSharePost } from "../../../hooks/useGetSharePost";
 import PostHeader from "../PostHeader";
 import SharePostComponent from "../SharePost";
+import useAuth from "../../../context/useAuth";
 
 function NewsFeedSM() {
   const { user } = useAuth();

@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   doc,
+  onSnapshot,
   setDoc,
   updateDoc
 } from "firebase/firestore";
@@ -28,7 +29,6 @@ export const useSharePostLike = (sharedPostId, userId, isLiked) => {
   const toggleLikeShared = async () => {
     try {
       const postRef = doc(db, "shared-posts", sharedPostId);
-      console.log("sharedPostId", sharedPostId);
       await updateDoc(postRef, {
         likes: isLiked ? arrayRemove(userId) : arrayUnion(userId)
       });

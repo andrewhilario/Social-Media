@@ -6,7 +6,8 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from "firebase/auth";
-import { app as firebaseApp } from "../firebase/firebase";
+import { app as firebaseApp, auth } from "../firebase/firebase";
+
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,22 +19,25 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const auth = getAuth(firebaseApp);
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
-        setUser(authUser);
-      } else {
-        setUser(null);
+    // Persist user session using localStorage
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        if (user) {
+          setUser(user);
+        } else {
+          setUser(null);
+        }
+      },
+      {
+        persistence: localStorage
       }
-    });
+    );
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password, redirectTo) => {
-    const auth = getAuth(firebaseApp);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate(redirectTo);
@@ -43,7 +47,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async (redirectTo) => {
-    const auth = getAuth(firebaseApp);
     try {
       await signOut(auth);
       navigate(redirectTo);
@@ -57,10 +60,6 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
 
 export default AuthContext;

@@ -17,12 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { FiUpload } from "react-icons/fi";
 import { CloseIcon } from "@chakra-ui/icons";
-import { useAuth } from "../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { auth, db, storage } from "../../../firebase/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import useAuth from "../../../context/useAuth";
 
 function EditModal(props) {
   const [photoFile, setPhotoFile] = useState(null);

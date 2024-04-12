@@ -17,8 +17,9 @@ import {
   useCollectionData,
   useDocumentData
 } from "react-firebase-hooks/firestore";
-import { useAuth } from "../context/AuthContext";
+
 import useGetUserOtherInfo from "./useGetUserOtherInfo";
+import useAuth from "../context/useAuth";
 
 export function useCreatePost() {
   const [isLoading, setIsLoading] = useState(false);

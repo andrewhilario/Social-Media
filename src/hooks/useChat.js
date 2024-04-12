@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/useAuth";
 
 const useChat = () => {
   const navigate = useNavigate();

@@ -13,6 +13,7 @@ import Layout from "../pages/Layout";
 import LoginModal from "../components/LoginModal/LoginModal";
 
 const HomepageLoader = () => {
+  console.log("HomepageLoader");
   return (
     <>
       <Layout webName="UM Connect" bgColor="#EDEDED" paddingY={5}>

@@ -15,8 +15,9 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useAuth } from "../context/AuthContext";
+
 import useGetUserOtherInfo from "./useGetUserOtherInfo";
+import useAuth from "../context/useAuth";
 
 const useComment = () => {
   const { user } = useAuth();

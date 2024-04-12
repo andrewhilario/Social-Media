@@ -22,7 +22,7 @@ import ProfilePost from "../../Profile/components/ProfilePost";
 import { FiEdit } from "react-icons/fi";
 
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
-import { useAuth } from "../../../context/AuthContext";
+
 import ProfileLoader from "../../../loaders/ProfileLoader";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiUserPlus } from "react-icons/bi";
@@ -32,6 +32,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import { RiUserSharedLine } from "react-icons/ri";
 import useAddFriend from "../../../hooks/useAddFriend";
+import useAuth from "../../../context/useAuth";
 
 function ViewProfileHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure();

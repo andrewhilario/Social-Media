@@ -18,7 +18,7 @@ import { BsGlobeAsiaAustralia } from "react-icons/bs";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoLockClosed } from "react-icons/io5";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
-import { useAuth } from "../../context/AuthContext";
+import useAuth from "../../context/useAuth";
 
 function PostHeader(props) {
   const { userOtherInfo } = useGetUserOtherInfo();

@@ -28,12 +28,12 @@ import {
 } from "@chakra-ui/react";
 import EditModal from "./EditModal";
 import { FaGlobeAsia, FaUserFriends, FaLock } from "react-icons/fa";
-import { useAuth } from "../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebase/firebase";
 import { useForm } from "react-hook-form";
 import { doc, setDoc } from "firebase/firestore";
+import useAuth from "../../../context/useAuth";
 
 const UpdateProfileModal = ({ isOpen, onClose }) => {
   const [changeBio, setChangeBio] = useState(false);

@@ -15,7 +15,6 @@ import Person1 from "../../assets/images/person-1.jpg";
 import { HiDotsVertical } from "react-icons/hi";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { useAuth } from "../../context/AuthContext";
 
 function Post({
   isSharePost,

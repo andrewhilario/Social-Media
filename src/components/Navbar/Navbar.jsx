@@ -23,10 +23,10 @@ import { SearchBar } from "../SearchBar";
 import Person1 from "../../assets/images/person-1.jpg";
 import { CgProfile } from "react-icons/cg";
 import { MdLogout } from "react-icons/md";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import DefaultAvatar from "../../assets/images/default-avatar.jpg";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
+import useAuth from "../../context/useAuth";
 
 function Navbar({ websiteName, paddingVertical, logoMargin }) {
   const { logout, user } = useAuth();

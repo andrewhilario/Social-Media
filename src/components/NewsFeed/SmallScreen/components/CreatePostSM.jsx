@@ -19,7 +19,6 @@ import React, { useState } from "react";
 import { SearchBar } from "../../../SearchBar";
 import { LuImage } from "react-icons/lu";
 import Person1 from "../../../../assets/images/person-1.jpg";
-import { useAuth } from "../../../../context/AuthContext";
 import useGetUserOtherInfo from "../../../../hooks/useGetUserOtherInfo";
 import { useForm } from "react-hook-form";
 import { useCreatePost } from "../../../../hooks/usePosts";
@@ -28,6 +27,7 @@ import { storage } from "../../../../firebase/firebase";
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons";
 import { MdOutlinePublic } from "react-icons/md";
 import { BiSolidLockAlt } from "react-icons/bi";
+import useAuth from "../../../../context/useAuth";
 
 function CreatePostSM() {
   const [isSelected, setIsSelected] = useState("Public");

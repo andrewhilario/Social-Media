@@ -13,8 +13,7 @@ import {
   updateDoc
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useAuth } from "../context/AuthContext";
-import { useParams } from "react-router-dom";
+import useAuth from "../context/useAuth";
 
 export const useStories = () => {
   const { user } = useAuth();

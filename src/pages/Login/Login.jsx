@@ -22,10 +22,11 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../components/LoginComponents/Footer";
 import CreateAccountModal from "../../components/LoginComponents/CreateAccountModal";
 import Form from "../../components/Form/Form";
-import { useAuth } from "../../context/AuthContext";
+
 import { auth } from "../../firebase/firebase";
 import { set, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import useAuth from "../../context/useAuth";
 
 export default function Login() {
   const isSmallScreen = useMediaQuery("(max-width: 425px)");

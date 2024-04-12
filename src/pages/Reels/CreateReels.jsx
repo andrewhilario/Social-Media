@@ -15,10 +15,10 @@ import {
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
 import Layout from "../../pages/Layout";
-import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { useReels } from "../../hooks/useReels";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../context/useAuth";
 
 function CreateReels() {
   const { user } = useAuth();

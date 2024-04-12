@@ -6,26 +6,15 @@ import { Box, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import Layout from "../Layout";
 import NewsFeed from "../../components/NewsFeed/NewsFeed";
 import SmallerScreen from "../SmallScreen/SmallerScreen";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import HomepageLoader from "../../loaders/HomepageLoader";
 import ChatBubble from "../../components/ChatBubble/ChatBubble";
+import useAuth from "../../context/useAuth";
 
 function Homepage() {
   const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const authListener = () => {
-      if (!user) {
-        navigate("/login");
-      } else {
-        navigate("/");
-      }
-    };
-    authListener();
-  }, []);
 
   if (user) {
     return (
@@ -86,7 +75,7 @@ function Homepage() {
       </>
     );
   } else {
-    <HomepageLoader />;
+    return <HomepageLoader />;
   }
 }
 

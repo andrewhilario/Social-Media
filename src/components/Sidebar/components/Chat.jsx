@@ -12,7 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { USERS } from "../../../constant/users";
 import useFriends from "../../../hooks/useFriends";
-import { useAuth } from "../../../context/AuthContext";
 import { add, set } from "date-fns";
 import { list } from "firebase/storage";
 import { fr } from "date-fns/locale";
@@ -23,6 +22,7 @@ import ChatBubble from "../../ChatBubble/ChatBubble";
 import useChat from "../../../hooks/useChat";
 import useGetUserOtherInfo from "../../../hooks/useGetUserOtherInfo";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../../context/useAuth";
 
 function Chat() {
   const { listAllFriends } = useFriends();

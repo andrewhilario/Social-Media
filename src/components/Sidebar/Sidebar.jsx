@@ -15,8 +15,9 @@ import { FaShoppingCart } from "react-icons/fa";
 import Watch from "../../assets/svg/TV Show.svg";
 import Reels from "../../assets/svg/Reels.svg";
 import Person1 from "../../assets/images/person-1.jpg";
-import { useAuth } from "../../context/AuthContext";
+
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
+import useAuth from "../../context/useAuth";
 
 function Sidebar() {
   const { user } = useAuth();

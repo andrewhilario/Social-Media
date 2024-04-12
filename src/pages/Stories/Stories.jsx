@@ -23,10 +23,10 @@ import Layout from "../Layout";
 import { FaTrash } from "react-icons/fa";
 import backgroundGradients from "./constants/constants";
 import { useStories } from "../../hooks/useStories";
-import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { useForm } from "react-hook-form";
 import { set } from "date-fns";
+import useAuth from "../../context/useAuth";
 
 function RadioCard(props) {
   const { getInputProps, getRadioProps } = useRadio(props);

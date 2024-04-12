@@ -10,9 +10,9 @@ import {
 } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase/firebase";
 import useGetUserOtherInfo from "./useGetUserOtherInfo";
+import useAuth from "../context/useAuth";
 
 const useAddFriend = () => {
   const { user } = useAuth();

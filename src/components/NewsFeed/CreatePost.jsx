@@ -25,7 +25,6 @@ import { BiSolidLockAlt } from "react-icons/bi";
 import { RiLiveFill } from "react-icons/ri";
 import { AiFillCamera } from "react-icons/ai";
 import { BsEmojiLaughing } from "react-icons/bs";
-import { useAuth } from "../../context/AuthContext";
 import useGetUserOtherInfo from "../../hooks/useGetUserOtherInfo";
 import { Controller, set, useForm } from "react-hook-form";
 import {
@@ -36,6 +35,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import { useCreatePost } from "../../hooks/usePosts";
+import useAuth from "../../context/useAuth";
 
 function CreatePost(props) {
   const [isSelected, setIsSelected] = useState("Public");

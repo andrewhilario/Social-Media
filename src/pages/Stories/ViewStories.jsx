@@ -7,9 +7,9 @@ import Stories, { WithSeeMore } from "react-insta-stories";
 import Layout from "../Layout";
 import { useParams } from "react-router-dom";
 import { useGetStories, useGetUsersStories } from "../../hooks/useStories";
-import { useAuth } from "../../context/AuthContext";
 import { formatDistance } from "date-fns";
 import { useMemo } from "react";
+import useAuth from "../../context/useAuth";
 
 const ViewStories = () => {
   const { user } = useAuth();
